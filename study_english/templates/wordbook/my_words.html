@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+    <header id="page-header">
+        <div class="container my-3 py-3 bg-light">
+            <div class="row">
+                <div class="col-md-6 m-auto text-center">
+                    <h1>英単語</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="list">
+        <div class="container my-3">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>最新の英単語</h4>
+                        </div>
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>英語</th>
+                                    <th>日本語</th>
+                                    <th>変更</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for word in words.items %}
+                                <tr>
+                                    <td>{{ word.id }}</td>
+                                    <td>{{ word.english }}</td>
+                                    <td>{{ word.japanese }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-secondary">
+                                        変更
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

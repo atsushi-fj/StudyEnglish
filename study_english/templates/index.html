@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+    <header id="page-header">
+        <div class="container my-3 bg-light">
+            <div class="row">
+                <div class="col-md-6 m-auto text-center">
+                    <h1 class="fst-italic">Study English</h1>
+                    <p>英語学習サイト</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!--ページ明細-->
+    <div class="container my-3">
+        <div class="row mb-2">
+            <!--コンテンツ-->
+            <div class="class col-8">
+                <!--コース一覧-->
+                <section id="course">
+                    <div class="row">
+                        <div class="col-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body" style="max-height:26rem;">
+                                    <div class="mb-3" style="text-align: center;">
+                                        <img src="#"
+                                        class="img-fluid card-img-top" style="max-height: 10rem;">
+                                    </div>
+                                    <h3>
+                                        <a href="#" class="card-title text-decoration-none">
+                                            <span class="fst-italic">My英単語帳</span>
+                                        </a>
+                                    </h3>
+                                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, provident!</p>
+                                    <a href="#" class="btn btn-dark">はじめる</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!--サイドバー-->
+            <div class="col-md-4">
+                <div class="position-sticky" style="top: 2rem;">
+                    <!--検索欄-->
+                    <div class="container-fluid mb-3">
+                        <form action="#" class="d-flex" method="POST">
+                        </form>
+                    </div>
+
+                    <!--最新コース-->
+                    <div class="p-4">
+                        <h4 class="fst-italic">RECENT COURSE<span class="ms-2 fs-6">最新コース</span></h4>
+                        <hr>
+                        <ol class="list-unstyled">
+                            <li>
+                                <a href="#" class="text-decoration-none">
+                                    <img src="#"
+                                    class="img-fluid" width="90" height="50">
+                                    <span class="ms-2">タイトル</span>
+                                    <span class="ms-2">タイトル</span>
+                                </a>
+                            </li>
+                            <hr>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

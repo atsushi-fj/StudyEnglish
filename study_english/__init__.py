@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
-
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "mysecretkey"
@@ -25,6 +24,22 @@ def localize_callback(*args, **kwargs):
 
 login_manager.localize_callback = localize_callback
 
-from study_english.users.views import users
+from sqlalchemy.engine import Engine
+from sqlalchemy import event
 
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
+
+from study_english.main.views import main  
+from study_english.users.views import users
+from study_english.wordbook.views import wordbook
+from study_english.error_pages.handlers import error_pages
+
+app.register_blueprint(main)
 app.register_blueprint(users)
+app.register_blueprint(wordbook)
+app.register_blueprint(error_pages)

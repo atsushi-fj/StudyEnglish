@@ -1,7 +1,7 @@
 from study_english import db
 from study_english.models import User
 
-# db.drop_all()
+db.drop_all()
 db.create_all()
 
 user1 = User(email="admin_user@test.com", username="Admin User",
