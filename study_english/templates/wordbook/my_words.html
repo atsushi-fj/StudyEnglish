@@ -34,7 +34,7 @@
                                     <td>{{ word.english }}</td>
                                     <td>{{ word.japanese }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-secondary">
+                                        <a href="{{ url_for('wordbook.update_word', word_id=word.id) }}" class="btn btn-secondary">
                                         変更
                                         </a>
                                     </td>

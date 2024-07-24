@@ -36,9 +36,12 @@ def create_wordbook(user_id):
     return render_template("wordbook/create_wordbook.html", form=form)
 
 
-@wordbook.route("/<int:wordbook_id>/my_words")
+@wordbook.route("/<int:user_id>/<int:wordbook_id>/my_words")
 @login_required
-def my_words(wordbook_id):
+def my_words(user_id, wordbook_id):
+    print(current_user)
+    if user_id != current_user.id:
+        abort(403)
     page = request.args.get("page", 1, type=int)
     words = Word.query.filter_by(book_id=wordbook_id).order_by(
         Word.id.desc()).paginate(page, per_page=10)
@@ -48,6 +51,9 @@ def my_words(wordbook_id):
 @wordbook.route("/<int:wordbook_id>/create_word", methods=["GET", "POST"])
 @login_required
 def create_word(wordbook_id):
+    wordbook = WordBook.query.get_or_404(wordbook_id)
+    if wordbook.user_id != current_user:
+        abort(403)
     form = WordForm()
     if form.validate_on_submit():
         word = Word(english=form.english.data,
@@ -58,4 +64,35 @@ def create_word(wordbook_id):
         flash("新しい英単語を保存しました")
         return redirect(url_for("wordbook.my_wordbooks", user_id=current_user.id))
     return render_template("wordbook/create_word.html", form=form)
+
+
+@wordbook.route("/<int:wordbook_id>/<int:word_id>/delete_word", methods=["GET", "POST"])
+@login_required
+def delete_word(word_id):
+    word = Word.query.get_or_404(word_id)
+    book_id = word.book_id
+    db.session.delete(word)
+    db.session.commit()
+    return redirect(url_for("wordbook/my_words.html", wordbook_id=book_id), )
+
+
+@wordbook.route("/<int:word_id>/update_word", methods=["GET", "POST"])
+def update_word(word_id):
+    word = Word.query.get_or_404(word_id)
+    form = WordForm()
+    if form.validate_on_submit():
+        word.english = form.english.data
+        word.japanese = form.japanese.data
+        db.session.commit()
+        flash("英単語が更新されました")
+        return redirect(url_for("my_words", wordbook_id=word.book_id))
+    elif request.method == "GET":
+        form.english.data = word.english
+        form.japanese.data = word.japanese
+    return render_template("wordbook/update_word.html", form=form)
+
+
+
+
+    
         

@@ -35,7 +35,7 @@
                                         </a>
                                     </h3>
                                     <p> {{ wordbook.date.strftime("%Y-%m-%d") }}</p>
-                                    <a href="{{ url_for('wordbook.my_words', wordbook_id=wordbook.id) }}" class="btn btn-dark">開く</a>
+                                    <a href="{{ url_for('wordbook.my_words', wordbook_id=wordbook.id, user_id=wordbook.user_id) }}" class="btn btn-dark">開く</a>
                                 </div>
                             </div>
                         </div>
