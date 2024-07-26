@@ -9,6 +9,17 @@
             </div>
         </div>
     </header>
+    <section id="menu">
+        <div class="container my-3 py-4 bg-light">
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="{{ url_for('wordbook.create_word', wordbook_id=wordbook_id) }}" class="btn btn-secondary">
+                        追加
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section id="list">
         <div class="container my-3">
@@ -47,5 +58,4 @@
             </div>
         </div>
     </section>
-
 {% endblock %}

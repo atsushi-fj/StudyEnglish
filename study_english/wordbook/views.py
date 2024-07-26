@@ -36,23 +36,23 @@ def create_wordbook(user_id):
     return render_template("wordbook/create_wordbook.html", form=form)
 
 
-@wordbook.route("/<int:user_id>/<int:wordbook_id>/my_words")
-@login_required
-def my_words(user_id, wordbook_id):
-    print(current_user)
-    if user_id != current_user.id:
+@wordbook.route("/<int:wordbook_id>/my_words")
+@login_required 
+def my_words(wordbook_id):
+    wordbook = WordBook.query.get_or_404(wordbook_id)
+    if wordbook.user_id != current_user.id:
         abort(403)
     page = request.args.get("page", 1, type=int)
     words = Word.query.filter_by(book_id=wordbook_id).order_by(
         Word.id.desc()).paginate(page, per_page=10)
-    return render_template("wordbook/my_words.html", words=words)
+    return render_template("wordbook/my_words.html", words=words, wordbook_id=wordbook_id)
 
 
 @wordbook.route("/<int:wordbook_id>/create_word", methods=["GET", "POST"])
 @login_required
 def create_word(wordbook_id):
     wordbook = WordBook.query.get_or_404(wordbook_id)
-    if wordbook.user_id != current_user:
+    if wordbook.user_id != current_user.id:
         abort(403)
     form = WordForm()
     if form.validate_on_submit():
@@ -66,7 +66,7 @@ def create_word(wordbook_id):
     return render_template("wordbook/create_word.html", form=form)
 
 
-@wordbook.route("/<int:wordbook_id>/<int:word_id>/delete_word", methods=["GET", "POST"])
+@wordbook.route("/<int:word_id>/delete_word", methods=["GET", "POST"])
 @login_required
 def delete_word(word_id):
     word = Word.query.get_or_404(word_id)
@@ -85,7 +85,7 @@ def update_word(word_id):
         word.japanese = form.japanese.data
         db.session.commit()
         flash("英単語が更新されました")
-        return redirect(url_for("my_words", wordbook_id=word.book_id))
+        return redirect(url_for("wordbook.my_words", user_id=current_user.id, wordbook_id=word.book_id))
     elif request.method == "GET":
         form.english.data = word.english
         form.japanese.data = word.japanese

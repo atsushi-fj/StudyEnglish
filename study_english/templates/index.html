@@ -32,7 +32,11 @@
                                         </a>
                                     </h3>
                                     <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, provident!</p>
-                                    <a href="#" class="btn btn-dark">はじめる</a>
+                                    {% if current_user.id %}
+                                    <a href="{{ url_for('wordbook.my_wordbooks', user_id=current_user.id) }}" class="btn btn-dark">はじめる</a>
+                                    {% else %}
+                                    <a href="{{ url_for('users.login') }}" class="btn btn-dark">はじめる</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

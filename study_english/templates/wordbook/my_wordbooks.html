@@ -11,6 +11,18 @@
         </div>
     </header>
 
+    <section id="menu">
+        <div class="container my-3 py-4 bg-light">
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="{{ url_for('wordbook.create_wordbook', user_id=wordbooks.items[0].user_id) }}" class="btn btn-secondary">
+                        新規作成
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!--ページ明細-->
     <div class="container my-3">
         <div class="row mb-2">
