@@ -20,7 +20,7 @@ def login():
                 login_user(user)
                 next = request.args.get("next")
                 if next == None or not next[0] == "/":
-                    next = url_for("users.user_maintenance")
+                    next = url_for("main.index")
                 return redirect(next)
             else:
                 flash("パスワードが一致しません")

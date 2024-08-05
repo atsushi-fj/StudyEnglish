@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, session, flash, request, abort
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_required, current_user
 from flask import Blueprint
 from study_english.models import WordBook, Word
 from study_english import db
