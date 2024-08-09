@@ -1,24 +1,45 @@
 <template>
   <body class="text-center">
-    <form action="" class="form-signin">
+    <form @submit.prevent="login" action="" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">ログインしてください</h1>
-        <br>
-        <label for="inputEmail" class="sr-only">メールアドレス</label>
-        <input v-model="email" type="email" placeholder="mail@example.com" class="form-control" id="inputEmail" required autofocus>
-        <br>
-        <label for="inputPassword" class="sr-only">パスワード</label>
-        <input v-model="password" type="password" class="form-control" id="inputPassword" required autofocus>
-        <br>
-        <button class="btn btn-lg btn-success btn-block" type="submit">ログイン</button>
+        <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
+        <input v-model="password" type="password" placeholder="パスワード" class="form-control mt-3" id="inputPassword" required autofocus>
+        <button class="btn btn-lg btn-success btn-block mt-5" type="submit" @click="login">ログイン</button>
+        <p>{{ message }}</p>
+        <p v-if="message">{{ message }}</p>
     </form>
   </body>
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
-
-}
+  data() {
+    return {
+        email: '',
+        password: '',
+        message: ''
+    };
+  },
+  methods: {
+    async login() {
+        try {
+            const response = await axios.post('http://127.0.0.1:5000/login',
+                {
+                    email: this.email,
+                    password: this.password,
+                });
+                this.message = response.data.message;
+                if (response.status === 200) {
+                    this.$router.push({ name: 'home'})
+                }
+            } catch (error) {
+                this.message = error.response.data.message;
+            }
+        }
+    }
+  }
 </script>
 
 <style scoped>

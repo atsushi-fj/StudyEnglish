@@ -43,3 +43,11 @@ app.register_blueprint(main)
 app.register_blueprint(users)
 app.register_blueprint(wordbook)
 app.register_blueprint(error_pages)
+
+from flask_restful import Api
+from study_english.api import UserApi
+from flask_cors import CORS
+
+CORS(app)
+api = Api(app)
+api.add_resource(UserApi, "/login")
