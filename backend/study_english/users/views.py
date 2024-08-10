@@ -10,23 +10,23 @@ import json
 users = Blueprint("users", __name__)
 
 
-@users.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None:
-            if user.check_password(form.password.data):
-                login_user(user)
-                next = request.args.get("next")
-                if next == None or not next[0] == "/":
-                    next = url_for("main.index")
-                return redirect(next)
-            else:
-                flash("パスワードが一致しません")
-        else:
-            flash("入力されたユーザーは存在しません")
-    return render_template("users/login.html", form=form)
+# @users.route("/login", methods=["GET", "POST"])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(email=form.email.data).first()
+#         if user is not None:
+#             if user.check_password(form.password.data):
+#                 login_user(user)
+#                 next = request.args.get("next")
+#                 if next == None or not next[0] == "/":
+#                     next = url_for("main.index")
+#                 return redirect(next)
+#             else:
+#                 flash("パスワードが一致しません")
+#         else:
+#             flash("入力されたユーザーは存在しません")
+#     return render_template("users/login.html", form=form)
 
 
 @users.route("/logout")
@@ -36,20 +36,20 @@ def logout():
     return redirect(url_for("users.login"))
 
 
-@users.route("/register", methods=["GET", "POST"])
-@login_required
-def register():
-    form = RegistrationFrom()
-    if not current_user.is_administrator():
-        abort(403)
-    if form.validate_on_submit():
-        user = User(email=form.email.data, username=form.username.data,
-                    password=form.password.data, administrator="0")
-        db.session.add(user)
-        db.session.commit()
-        flash("ユーザーが登録されました")
-        return redirect(url_for("users.user_maintenance"))
-    return render_template("users/register.html", form=form)
+# @users.route("/register", methods=["GET", "POST"])
+# @login_required
+# def register():
+#     form = RegistrationFrom()
+#     if not current_user.is_administrator():
+#         abort(403)
+#     if form.validate_on_submit():
+#         user = User(email=form.email.data, username=form.username.data,
+#                     password=form.password.data, administrator="0")
+#         db.session.add(user)
+#         db.session.commit()
+#         flash("ユーザーが登録されました")
+#         return redirect(url_for("users.user_maintenance"))
+#     return render_template("users/register.html", form=form)
 
 
 

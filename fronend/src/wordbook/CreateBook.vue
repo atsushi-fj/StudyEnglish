@@ -7,8 +7,8 @@
             </div>
             <form accept="" class="shadow p-4">                  
                 <div class="mb-3">
-                    <label for="username">タイトル</label>
-                    <input type="text" class="form-control" name="username" id="username" placeholder="タイトル">
+                    <label for="title">タイトル</label>
+                    <input v-model="title" type="text" class="form-control" name="title" id="title" placeholder="タイトル">
                 </div>
                 <div class="mb-3">
                     <label for="image">画像のアップロード</label>
@@ -16,7 +16,7 @@
                     <input type="file" id="image">
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-success">作成</button>
+                    <button type="submit" class="btn btn-success" @click="createBook">作成</button>
                 </div>
             </form>
         </div>
@@ -32,6 +32,7 @@ export default {
         return {
             title: '',
             picture: null,
+            message: ''
         };
     },
     methods: {
@@ -43,13 +44,18 @@ export default {
         },
         async createBook() {
             try {
-                await axios.post('http://127.0.0.1:5000/create_book',
+                const response = await axios.post(`http://127.0.0.1:5000/${this.$route.params.user_id}/create_book`,
                 {
                     title: this.title,
                     picture: this.picture
                 });
+                this.message = response.data.message;
+                if (response.status === 200) {
+                    this.$router.push({ name: 'home'}
+                    )
+                }
             } catch (error) {
-                console.error("Error", error);
+                this.message = error.response.data.message;
             }
         }
 

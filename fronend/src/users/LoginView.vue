@@ -1,14 +1,19 @@
 <template>
-  <body class="text-center">
+  <div class="main">
+    <div v-if="message" class="container">
+      <div class="alert alert-danger mt-3" role="alert">
+      {{ message }}
+    </div>
+    </div>
+  <div id="body" class="text-center">
     <form @submit.prevent="login" action="" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">ログインしてください</h1>
         <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
         <input v-model="password" type="password" placeholder="パスワード" class="form-control mt-3" id="inputPassword" required autofocus>
         <button class="btn btn-lg btn-success btn-block mt-5" type="submit" @click="login">ログイン</button>
-        <p>{{ message }}</p>
-        <p v-if="message">{{ message }}</p>
     </form>
-  </body>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -19,35 +24,48 @@ export default {
     return {
         email: '',
         password: '',
-        message: ''
+        loginStatus: '',
+        message: '',
     };
   },
   methods: {
     async login() {
-        try {
-            const response = await axios.post('http://127.0.0.1:5000/login',
-                {
-                    email: this.email,
-                    password: this.password,
-                });
-                this.message = response.data.message;
-                if (response.status === 200) {
-                    this.$router.push({ name: 'home'})
-                }
-            } catch (error) {
-                this.message = error.response.data.message;
-            }
+      try {
+        const postData = {
+          'email': String(this.email),
+          'password': String(this.password)    
+        };
+
+        const response = await axios.post('http://127.0.0.1:5000/login', postData);
+        this.loginStatus = response.data.status;
+        if (this.loginStatus === "SUCCESS") {
+          localStorage.setItem('isAuthenticated', 'true');
+          this.$router.push({ name: 'home' });
+        } else if (this.loginStatus === "PASSWORD FAIL") {
+          localStorage.setItem('isAuthenticated', 'false');
+          this.message = "パスワードが一致しません";
+        } else if (this.loginStatus === "USER FAIL") {
+          localStorage.setItem('isAuthenticated', 'false');
+          this.message = "入力されたユーザーは存在しません";
+        }
+    } catch(error) {
+        console.log(error);
+        this.loginStatus = "ERROR";
+    } finally {
+          this.email = '';
+          this.password = '';
+    }
         }
     }
   }
 </script>
 
 <style scoped>
-body {
+#body {
   height: 100%;
 }
 
-body {
+#body {
   display: -ms-flexbox;
   display: -webkit-box;
   display: flex;

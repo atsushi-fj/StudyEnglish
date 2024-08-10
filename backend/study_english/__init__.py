@@ -39,15 +39,16 @@ from study_english.users.views import users
 from study_english.wordbook.views import wordbook
 from study_english.error_pages.handlers import error_pages
 
-app.register_blueprint(main)
-app.register_blueprint(users)
-app.register_blueprint(wordbook)
-app.register_blueprint(error_pages)
+# app.register_blueprint(main)
+# app.register_blueprint(users)
+# app.register_blueprint(wordbook)
+# app.register_blueprint(error_pages)
 
 from flask_restful import Api
-from study_english.api import UserApi
+from study_english.api import LoginApi, CreateBookApi
 from flask_cors import CORS
 
 CORS(app)
 api = Api(app)
-api.add_resource(UserApi, "/login")
+api.add_resource(LoginApi, "/login")
+api.add_resource(CreateBookApi, "/<int:user_id>/create_book")
