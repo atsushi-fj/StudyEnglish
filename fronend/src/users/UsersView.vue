@@ -4,31 +4,33 @@
     <div class="container my-3 py-3">
       <div class="row">
         <div class="col-md-6 m-auto text-center">
-          <h1>My英単語帳</h1>
+          <h1>ユーザー管理</h1>
         </div>
       </div>
     </div>
   </header>
   <section id="list">
     <div class="container my-3">
-      <div class="row">
-        <div class="col-4 mb-4">
-          <div class="card h-100" v-for="wordbook in wordbooks" :key="wordbook.image" >
-            <div class="card-body" style="max-height:60rem;">
-              <div class="mb-3" style="text-align: center;">
-                <img :src="`http://127.0.0.1:5000/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top" style="max-height: 30rem;">
-              </div>
-              <h3>
-                <a href="" class="card-title text-decoration-none">
-                  <span>{{ wordbook.title }}</span>
-                </a>
-              </h3>
-              <p>{{ wordbook.date }}</p>
-              <a class="btn btn-success" @click="deleteBook(wordbook.id)">削除</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <table class="centered-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ユーザー名</th>
+            <th>メールアドレス</th>
+            <th>管理者</th>
+            <th>変更</th>
+          </tr>
+        </thead>
+        <tbody v-for="user in users" :key="user.id">
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.administrator }}</td>
+            <td><router-link class="btn btn-success" :to="`/${user.id}/account`">変更</router-link></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
   <div class="container d-flex justify-content-center">
@@ -55,43 +57,22 @@ import axios from 'axios';
 export default {
   data() {
     return {
-        wordbooks: [],
+        users: [],
         totalPages: 0,
         currentPage: 1,
         perPage: 8,
-        deleteBookId: 1,
-        deleteStatus: "",
     };
   },
   methods: {
-    async deleteBook(id = 1) {
-      const userId = this.$route.params.user_id;
+    async fetchUsers(page = 1) {
       try {
-        const response = await axios.delete(`http://127.0.0.1:5000/${userId}/wordbooks`, {
-          data: {
-            book_id: id,
-          }
-        });
-        console.log(response.data)
-        this.deleteStatus = response.data.status;
-      } catch(error) {
-        console.log(error)
-      }
-    },
-    async fetchBooks(page = 1) {
-      const userId = this.$route.params.user_id;
-      try {
-          const response = await axios.get(`http://127.0.0.1:5000/${userId}/wordbooks`, {
+          const response = await axios.get('http://127.0.0.1:5000/users', {
               params: {
                 page: page,
                 per_page: this.perPage,
-              },
-              headers: {
-                'Content-Type': 'multipart/form-data'
               }
             });
-            console.log(response.data)
-            this.wordbooks = response.data.wordbooks;
+            this.users = response.data.users;
             this.totalPages = response.data.pages;
             this.currentPage = response.data.current_page;
           } catch(error) {
@@ -100,12 +81,12 @@ export default {
         },
     changePage(page) {
         if (page >= 1 && page <= this.totalPages) {
-            this.fetchBooks(page);
+            this.fetchUsers(page);
         }
       }
     },
     mounted() {
-      this.fetchBooks();
+      this.fetchUsers();
     }
 };
 </script>

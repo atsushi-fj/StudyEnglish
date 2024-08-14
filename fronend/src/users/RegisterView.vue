@@ -1,6 +1,10 @@
 <template>
-  <body class="text-center">
-    <form action="" class="form-signin">
+  <div class="main">
+    <div v-if="message" class="container">
+      <div class="alert alert-danger mt-3" role="alert">{{ message }}</div>
+    </div>
+    <body class="text-center">
+    <form @submit.prevent="register" action="" class="form-signin">
       <h1 class="h3 mb-3 font-weight-normal">会員登録してください</h1>
       <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
       <input v-model="username" type="text" placeholder="ユーザー名" class="form-control mt-3" id="inputUserName" required autofocus>
@@ -9,6 +13,7 @@
       <button class="btn btn-lg btn-success btn-block mt-5" type="submit" @click="register">登録</button>
     </form>
   </body>
+  </div>
 </template>
   
 <script>
@@ -55,7 +60,9 @@ export default {
         console.log(error);
       } finally {
         this.email = '';
+        this.username = '';
         this.password = '';
+        this.passConfirm = '';
       }
     }
   }

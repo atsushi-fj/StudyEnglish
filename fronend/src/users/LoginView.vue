@@ -1,9 +1,7 @@
 <template>
   <div class="main">
     <div v-if="message" class="container">
-      <div class="alert alert-danger mt-3" role="alert">
-      {{ message }}
-    </div>
+      <div class="alert alert-danger mt-3" role="alert">{{ message }}a</div>
     </div>
   <div id="body" class="text-center">
     <form @submit.prevent="login" action="" class="form-signin">
@@ -24,6 +22,8 @@ export default {
     return {
         email: '',
         password: '',
+        userId: '',
+        isAdmin: '',
         loginStatus: '',
         message: '',
     };
@@ -40,6 +40,10 @@ export default {
         this.loginStatus = response.data.status;
         if (this.loginStatus === "SUCCESS") {
           localStorage.setItem('isAuthenticated', 'true');
+          this.userId = response.data.id;
+          this.isAdmin = response.data.admin;
+          localStorage.setItem('userId', this.userId);
+          localStorage.setItem('isAdmin', this.isAdmin);
           this.$router.push({ name: 'home' });
         } else if (this.loginStatus === "PASSWORD FAIL") {
           localStorage.setItem('isAuthenticated', 'false');

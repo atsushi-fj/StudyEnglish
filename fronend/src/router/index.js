@@ -4,7 +4,10 @@ import LoginView from '@/users/LoginView.vue'
 import RegisterView from '@/users/RegisterView.vue'
 import WordBooks from '@/wordbook/WordBooks.vue'
 import CreateBook from '@/wordbook/CreateBook.vue'
+import AccountView from '@/users/AccountView.vue'
 import Error403View from '@/error/Error403View.vue'
+import Error404View from '@/error/Error404View.vue'
+import UsersView from '@/users/UsersView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,8 +34,23 @@ const router = createRouter({
       }
     },
     {
-      path: '/:user_id',
-      name: 'my_wordbooks',
+      path: '/users',
+      name: 'users',
+      components: {
+        default: UsersView,
+      }
+    },
+    {
+      path: '/:user_id/account',
+      name: 'account',
+      components: {
+        default: AccountView,
+      },
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/:user_id/wordbooks',
+      name: 'wordbooks',
       components: {
         default: WordBooks,
       }
@@ -42,14 +60,8 @@ const router = createRouter({
       name: 'create_book',
       components: {
         default: CreateBook,
-      }
-    },
-    {
-      path: '/:user_id/create_book',
-      name: 'create_book',
-      components: {
-        default: CreateBook,
-      }
+      },
+      meta: { requiresAuth: true }
     },
     {
       path: '/error403',
@@ -58,15 +70,27 @@ const router = createRouter({
         default: Error403View,
       }
     },
+    {
+      path: '/:catchAll(.*)',
+      name: 'error404',
+      components: {
+        default: Error404View,
+      }
+    },
 
   ],
 })
 
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
-
-  if (requiresAuth && !isAuthenticated) {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const userId = localStorage.getItem('userId');
+  const isAdmin = localStorage.getItem('isAdmin');
+  const isUser = to.params.id === userId;
+  
+  if (isAdmin === '1') {
+    next()
+  } else if (requiresAuth && !isAuthenticated && !isUser) {
     next({ name: 'error403' })
   } else {
     next()

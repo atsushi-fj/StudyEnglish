@@ -29,11 +29,11 @@ users = Blueprint("users", __name__)
 #     return render_template("users/login.html", form=form)
 
 
-@users.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for("users.login"))
+# @users.route("/logout")
+# @login_required
+# def logout():
+#     logout_user()
+#     return redirect(url_for("users.login"))
 
 
 # @users.route("/register", methods=["GET", "POST"])
@@ -53,46 +53,46 @@ def logout():
 
 
 
-@users.route("/user_maintenance")
-@login_required
-def user_maintenance():
-    page = request.args.get("page", 1, type=int)
-    users = User.query.order_by(User.id).paginate(page=page, per_page=10)
-    return render_template("users/user_maintenance.html", users=users)
+# @users.route("/user_maintenance")
+# @login_required
+# def user_maintenance():
+#     page = request.args.get("page", 1, type=int)
+#     users = User.query.order_by(User.id).paginate(page=page, per_page=10)
+#     return render_template("users/user_maintenance.html", users=users)
 
 
-@users.route("/<int:user_id>/account", methods=["GET", "POST"])
-@login_required
-def account(user_id):
-    user = User.query.get_or_404(user_id)
-    if user.id != current_user.id and not current_user.is_administrator():
-        abort(403)
-    form = UpdateUserForm(user_id)
-    if form.validate_on_submit():
-        user.username = form.username.data
-        user.email = form.email.data
-        if form.password.data:
-            user.password = form.password.data
-        db.session.commit()
-        flash("ユーザーアカウントが更新されました")
-        return redirect(url_for("users.user_maintenance"))
-    elif request.method == "GET":
-        form.username.data = user.username
-        form.email.data = user.email
-    return render_template("users/account.html", form=form)
+# @users.route("/<int:user_id>/account", methods=["GET", "POST"])
+# @login_required
+# def account(user_id):
+#     user = User.query.get_or_404(user_id)
+#     if user.id != current_user.id and not current_user.is_administrator():
+#         abort(403)
+#     form = UpdateUserForm(user_id)
+#     if form.validate_on_submit():
+#         user.username = form.username.data
+#         user.email = form.email.data
+#         if form.password.data:
+#             user.password = form.password.data
+#         db.session.commit()
+#         flash("ユーザーアカウントが更新されました")
+#         return redirect(url_for("users.user_maintenance"))
+#     elif request.method == "GET":
+#         form.username.data = user.username
+#         form.email.data = user.email
+#     return render_template("users/account.html", form=form)
 
 
-@users.route("/<int:user_id>/delete", methods=["GET", "POST"]) 
-@login_required
-def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
-    if not current_user.is_administrator():
-        abort(403)
-    if user.is_administrator():
-        flash("管理者は削除できません")
-        return redirect(url_for("users.account", user_id=user_id))
-    db.session.delete(user)
-    db.session.commit()
-    flash("ユーザーアカウントが削除されました")
-    return redirect(url_for("users.user_maintenance"))
+# @users.route("/<int:user_id>/delete", methods=["GET", "POST"]) 
+# @login_required
+# def delete_user(user_id):
+#     user = User.query.get_or_404(user_id)
+#     if not current_user.is_administrator():
+#         abort(403)
+#     if user.is_administrator():
+#         flash("管理者は削除できません")
+#         return redirect(url_for("users.account", user_id=user_id))
+#     db.session.delete(user)
+#     db.session.commit()
+#     flash("ユーザーアカウントが削除されました")
+#     return redirect(url_for("users.user_maintenance"))
 

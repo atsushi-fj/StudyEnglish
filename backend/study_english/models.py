@@ -32,6 +32,14 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "administrator": self.administrator,
+        }
+    
     @property
     def password(self):
         raise AttributeError("password is not a readable attribute")
@@ -63,6 +71,14 @@ class WordBook(db.Model):
     
     def __repr__(self):
         return f"PostID: {self.id}, Title: {self.title}, Author: {self.author} \n"
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "date": self.date.isoformat(),
+            "title": self.title,
+            "image": str(self.featured_image),
+        }
     
     
 class Word(db.Model):

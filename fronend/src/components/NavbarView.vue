@@ -19,7 +19,7 @@
             <a class="nav-link" href="#">ユーザー</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" >ログアウト</a>
+            <button class="nav-link" @click="logout">ログアウト</button>
           </li>
         </ul>
       </div>
@@ -29,6 +29,25 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+export default {
+  methods: {
+    logout() {
+      localStorage.setItem('isAuthenticated', 'false');
+
+      axios.post('http://127.0.0.1:5000/logout')
+        .then(response => {
+          console.log('Logged out', response.data)
+        })
+        .catch(error => {
+          console.error('Error logging out', error)
+        });
+
+        this.$router.push({ name: "login" });
+    }
+  }
+};
 
 </script>
 
