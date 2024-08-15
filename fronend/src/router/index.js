@@ -8,6 +8,8 @@ import AccountView from '@/users/AccountView.vue'
 import Error403View from '@/error/Error403View.vue'
 import Error404View from '@/error/Error404View.vue'
 import UsersView from '@/users/UsersView.vue'
+import WordsView from '@/wordbook/WordsView.vue'
+import CreateWord from '@/wordbook/CreateWord.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -62,6 +64,20 @@ const router = createRouter({
         default: CreateBook,
       },
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/:wordbook_id/words',
+      name: 'words',
+      components: {
+        default: WordsView,
+      }
+    },
+    {
+      path: '/:wordbook_id/create_word',
+      name: 'create_word',
+      components: {
+        default: CreateWord,
+      }
     },
     {
       path: '/error403',

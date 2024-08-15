@@ -96,3 +96,10 @@ class Word(db.Model):
     def __repr__(self):
         return f"WordID: {self.id}, EnglishWord: {self.english}, JapaneseWord: {self.japanese} \n"
     
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "english": self.english,
+            "japanese": self.japanese,
+        }
+    

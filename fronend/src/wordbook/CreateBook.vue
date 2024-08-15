@@ -9,7 +9,7 @@
             <div class="mb-3">
                 <h3>英単語帳の作成</h3>
             </div>
-            <form class="shadow p-4">
+            <form @submit.prevent="createBook" class="shadow p-4">
                 <div class="mb-3">
                     <label for="title">タイトル</label>
                     <input v-model="title" type="text" class="form-control" name="title" id="title" placeholder="タイトル">
@@ -20,7 +20,7 @@
                     <input type="file" id="image" @change="onFileChange">
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-success" @click="createBook">作成</button>
+                    <button type="submit" class="btn btn-success">作成</button>
                 </div>
             </form>
         </div>
@@ -49,7 +49,6 @@ export default {
       const formData = new FormData();
       formData.append('title', this.title);
       formData.append('picture', this.picture);
-      console.log(formData);
       try {
         const response = await axios.put(`http://127.0.0.1:5000/${this.$route.params.user_id}/create_book`, formData, {
           headers: {

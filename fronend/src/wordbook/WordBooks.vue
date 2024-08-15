@@ -12,19 +12,19 @@
   <section id="list">
     <div class="container my-3">
       <div class="row">
-        <div class="col-4 mb-4">
-          <div class="card h-100" v-for="wordbook in wordbooks" :key="wordbook.image" >
-            <div class="card-body" style="max-height:60rem;">
-              <div class="mb-3" style="text-align: center;">
-                <img :src="`http://127.0.0.1:5000/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top" style="max-height: 30rem;">
+        <div class="col-4 mb-4" v-for="wordbook in wordbooks" :key="wordbook.image">
+          <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+              <div class="mb-3 flex-grow-1 d-flex align-items-center justify-content-center">
+                <img :src="`http://127.0.0.1:5000/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top">
               </div>
               <h3>
                 <a href="" class="card-title text-decoration-none">
                   <span>{{ wordbook.title }}</span>
                 </a>
               </h3>
-              <p>{{ wordbook.date }}</p>
-              <a class="btn btn-success" @click="deleteBook(wordbook.id)">削除</a>
+              <p>{{ wordbook.date.slice(0, 10) }}</p>
+              <a class="btn btn-success mt-auto" @click="showModal(wordbook.id)">削除</a>
             </div>
           </div>
         </div>
@@ -46,11 +46,29 @@
       </ul>
     </nav>
   </div>
+  <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
+          <button type="button" class="btn-close" @click="hideModal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>この英単語帳を削除しますか?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" @click="deleteBook(deleteBookId)">削除する</button>
+          <button type="button" class="btn btn-secondary" @click="hideModal">キャンセル</button>
+        </div>
+      </div>
+    </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { Modal } from 'bootstrap';
 
 export default {
   data() {
@@ -58,9 +76,9 @@ export default {
         wordbooks: [],
         totalPages: 0,
         currentPage: 1,
-        perPage: 8,
+        perPage: 3,
         deleteBookId: 1,
-        deleteStatus: "",
+        deleteStatus: '',
     };
   },
   methods: {
@@ -72,8 +90,9 @@ export default {
             book_id: id,
           }
         });
-        console.log(response.data)
         this.deleteStatus = response.data.status;
+        this.hideModal();
+        this.fetchBooks();
       } catch(error) {
         console.log(error)
       }
@@ -102,6 +121,16 @@ export default {
         if (page >= 1 && page <= this.totalPages) {
             this.fetchBooks(page);
         }
+      },
+      showModal(id) {
+        this.deleteBookId = id
+        const modal = new Modal(document.getElementById('delModal'));
+        modal.show();
+      },
+      hideModal() {
+        const modalElement = document.getElementById('delModal');
+        const modal = Modal.getInstance(modalElement);
+        modal.hide();
       }
     },
     mounted() {
@@ -111,16 +140,23 @@ export default {
 </script>
 
 <style scoped>
-.centered-table {
-  width: 100%;
-  border-collapse: collapse;
+.card {
+  max-height: 30rem;
 }
 
-.centered-table th,
-.centered-table td {
-  text-align: center; /* 水平方向の中央寄せ */
-  vertical-align: middle; /* 垂直方向の中央寄せ */
-  padding: 8px; /* セルの内側の余白 */
-  border: 1px solid #ddd; /* セルのボーダー */
+.card-img-top {
+  max-height: 15rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-success {
+  margin-top: auto;
+  width: 20%;
 }
 </style>

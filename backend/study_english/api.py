@@ -163,3 +163,46 @@ class ImageApi(Resource):
             return send_from_directory(folder, filename)
         except:
             return {"status": "ERROR"}
+
+
+class WordsApi(Resource):
+    
+    def get(self, wordbook_id):
+        try:
+            page = int(request.args.get("page", 1))
+            per_page = int(request.args.get("per_page", 10))
+            words = Word.query.filter_by(book_id=wordbook_id).order_by(
+                Word.id.desc()).paginate(page, per_page, False)
+            return {
+                "total": words.total,
+                "pages": words.pages,
+                "current_page": words.page,
+                "per_page": words.per_page,
+                "words": [word.to_dict() for word in words.items],
+            }
+        except:
+            return {"status": "ERROR"}
+
+      
+class WordApi(Resource):
+    
+    def put(self, wordbook_id):
+        try:
+            data = request.get_json()
+            word = Word(japanese=data["japanese"], english=data["english"], book_id=wordbook_id)
+            db.session.add(word)
+            db.session.commit()
+            return {"status": "Create successful"}
+        except:
+            return {"status": "FAIL"}
+        
+    def delete(self, wordbook_id):
+        try:
+            data = request.get_json()
+            word = Word.query.get(data["word_id"])
+            db.session.delete(word)
+            db.session.commit()
+            return {"status": "SUCCESS"}
+        except:
+            return {"status": "ERROR"}
+        
