@@ -5,10 +5,15 @@
     </div>
   <div id="body" class="text-center">
     <form @submit.prevent="login" action="" class="form-signin">
-        <h1 class="h3 mb-3 font-weight-normal">ログインしてください</h1>
+        <h1 class="h3 mb-3 font-weight-normal">ログイン</h1>
+        <p>サービスのご利用には会員登録が必要です。</p>
         <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
         <input v-model="password" type="password" placeholder="パスワード" class="form-control mt-3" id="inputPassword" required autofocus>
-        <button class="btn btn-lg btn-success btn-block mt-5" type="submit" @click="login">ログイン</button>
+        <button class="btn btn-lg btn-success btn-block mt-5" type="submit">ログイン</button>
+        <br>
+        <br>
+        <hr>
+        <router-link style="text-decoration: none;" :to="{name: 'register'}">会員登録はこちら</router-link>
     </form>
     </div>
   </div>
@@ -17,7 +22,7 @@
 <script>
 import axios from 'axios';
 
-export default {
+export default {  
   data() {
     return {
         email: '',
@@ -44,7 +49,7 @@ export default {
           this.isAdmin = response.data.admin;
           localStorage.setItem('userId', this.userId);
           localStorage.setItem('isAdmin', this.isAdmin);
-          this.$router.push({ name: 'home' });
+          this.$router.push(`${this.userId}/wordbooks`);
         } else if (this.loginStatus === "PASSWORD FAIL") {
           localStorage.setItem('isAuthenticated', 'false');
           this.message = "パスワードが一致しません";
@@ -102,4 +107,7 @@ export default {
   z-index: 2;
 }
 
+p {
+  white-space: nowrap;
+}
 </style>

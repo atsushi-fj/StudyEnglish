@@ -10,6 +10,8 @@ import Error404View from '@/error/Error404View.vue'
 import UsersView from '@/users/UsersView.vue'
 import WordsView from '@/wordbook/WordsView.vue'
 import CreateWord from '@/wordbook/CreateWord.vue'
+import LearnWord from '@/wordbook/LearnWord.vue'
+import EndLearning from '@/wordbook/EndLearning.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -52,7 +54,7 @@ const router = createRouter({
     },
     {
       path: '/:user_id/wordbooks',
-      name: 'wordbooks',
+      name: '/:user_id/wordbooks',
       components: {
         default: WordBooks,
       }
@@ -74,9 +76,23 @@ const router = createRouter({
     },
     {
       path: '/:wordbook_id/create_word',
-      name: 'create_word',
+      name: '/:wordbook_id/create_word',
       components: {
         default: CreateWord,
+      }
+    },
+    {
+      path: '/:wordbook_id/learn_word',
+      name: '/:wordbook_id/learn_word',
+      components: {
+        default: LearnWord,
+      }
+    },
+    {
+      path: '/:wordbook_id/end_learning',
+      name: '/:wordbook_id/end_learning',
+      components: {
+        default: EndLearning,
       }
     },
     {

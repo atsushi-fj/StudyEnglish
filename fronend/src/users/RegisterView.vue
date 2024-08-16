@@ -5,7 +5,7 @@
     </div>
     <body class="text-center">
     <form @submit.prevent="register" action="" class="form-signin">
-      <h1 class="h3 mb-3 font-weight-normal">会員登録してください</h1>
+      <h1 class="h3 mb-3 font-weight-normal">会員登録</h1>
       <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
       <input v-model="username" type="text" placeholder="ユーザー名" class="form-control mt-3" id="inputUserName" required autofocus>
       <input v-model="password" type="password" placeholder="パスワード" class="form-control mt-3" id="inputPassword" required autofocus>

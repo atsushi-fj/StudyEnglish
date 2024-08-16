@@ -45,7 +45,7 @@ from study_english.error_pages.handlers import error_pages
 # app.register_blueprint(error_pages)
 
 from flask_restful import Api
-from study_english.api import LoginApi, LogoutApi, AccountApi, CreateBookApi, RegisterApi, UsersApi, WordBooksApi, ImageApi, WordsApi, WordApi
+from study_english.api import LoginApi, LogoutApi, AccountApi, CreateBookApi, RegisterApi, UsersApi, WordBooksApi, ImageApi, WordsApi, WordApi, AllWordsApi
 from flask_cors import CORS
 
 CORS(app)
@@ -60,3 +60,5 @@ api.add_resource(WordBooksApi, "/<int:user_id>/wordbooks")
 api.add_resource(ImageApi, "/images/<string:filename>")
 api.add_resource(WordsApi, "/<int:wordbook_id>/words")
 api.add_resource(WordApi, "/<int:wordbook_id>/word")
+api.add_resource(AllWordsApi, "/<int:wordbook_id>/all_words")
+

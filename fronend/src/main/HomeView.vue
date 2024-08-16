@@ -8,7 +8,7 @@
           <span class="text-gradient d-inline">自分だけの<br>英単語帳を<br>作ろう!</span>
         </h1>
         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content xxl-start mb-3">
-          <router-link class="btn btn-success btn-lg px-5 py-3 me-sm-3 fs-6 fw-boder" :to="{name: 'home'}">はじめる</router-link>
+          <router-link class="btn btn-success btn-lg px-5 py-3 me-sm-3 fs-6 fw-boder" :to="{name: 'login'}">はじめる</router-link>
         </div>
         </div>
       </div>

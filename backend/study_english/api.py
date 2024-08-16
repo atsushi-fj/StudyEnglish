@@ -183,7 +183,17 @@ class WordsApi(Resource):
         except:
             return {"status": "ERROR"}
 
-      
+
+class AllWordsApi(Resource):
+    
+    def get(self, wordbook_id):
+        try:
+            words = Word.query.filter_by(book_id=wordbook_id).order_by(Word.id.desc())
+            return {"words": [word.to_dict() for word in words]}
+        except:
+            return {"status": "ERROR"}
+
+
 class WordApi(Resource):
     
     def put(self, wordbook_id):

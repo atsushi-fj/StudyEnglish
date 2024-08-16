@@ -9,6 +9,18 @@
         </div>
       </div>
     </header>
+    <section id="menu">
+      <div class="container my-3 py-3">
+        <div class="row">
+          <div class="col-md-1 d-flex justify-content-center">
+            <router-link class="btn btn-danger" :to="`/${$route.params.wordbook_id}/create_word`">追加</router-link>
+          </div>
+          <div class="col-md-1 d-flex justify-content-center">
+            <router-link class="btn btn-secondary" :to="`/${$route.params.wordbook_id}/create_word`">学習</router-link>
+          </div>
+        </div>
+      </div>
+    </section>
     <section id="list">
       <div class="container my-3">
         <table class="centered-table">
@@ -76,7 +88,7 @@
           words: [],
           totalPages: 0,
           currentPage: 1,
-          perPage: 8,
+          perPage: 7,
           deleteWordId: 1,
           deleteStatus: '',
       };
@@ -134,20 +146,30 @@
         this.fetchWords();
       }
   };
-  </script>
+</script>
   
-  <style scoped>
-  .centered-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .centered-table th,
-  .centered-table td {
-    text-align: center;
-    vertical-align: middle;
-    padding: 8px;
-    border: 1px solid #ddd;
-  }
-  </style>
+<style scoped>
+.centered-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.centered-table th,
+.centered-table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.btn-danger {
+margin-top: auto;
+width: 100%;
+}
+
+.btn-secondary {
+margin-top: auto;
+width: 100%;
+}
+</style>
   

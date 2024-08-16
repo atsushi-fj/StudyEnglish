@@ -24,7 +24,16 @@
                 </a>
               </h3>
               <p>{{ wordbook.date.slice(0, 10) }}</p>
-              <a class="btn btn-success mt-auto" @click="showModal(wordbook.id)">削除</a>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-3 d-flex justify-content-center">
+                    <router-link class="btn btn-secondary mt-auto" :to="`/${wordbook.id}/words`">一覧</router-link>
+                  </div>
+                  <div class="col-md-3 d-flex justify-content-center">
+                    <a class="btn btn-primary mt-auto" @click="showModal(wordbook.id)">削除</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -109,7 +118,6 @@ export default {
                 'Content-Type': 'multipart/form-data'
               }
             });
-            console.log(response.data)
             this.wordbooks = response.data.wordbooks;
             this.totalPages = response.data.pages;
             this.currentPage = response.data.current_page;
@@ -157,6 +165,11 @@ export default {
 
 .btn-success {
   margin-top: auto;
-  width: 20%;
+  width: 100%;
+}
+
+.btn-primary {
+  margin-top: auto;
+  width: 100%;
 }
 </style>
