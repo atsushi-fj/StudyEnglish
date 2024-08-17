@@ -9,6 +9,13 @@
       </div>
     </div>
   </header>
+  <div class="container my-2 py-2">
+    <div class="row">
+      <div class="col-md-2">
+        <router-link class="btn btn-orange" :to="`/${$route.params.user_id}/create_book`">単語帳の作成</router-link>
+      </div>
+    </div>
+  </div>
   <section id="list">
     <div class="container my-3">
       <div class="row">
@@ -27,10 +34,10 @@
               <div class="container">
                 <div class="row">
                   <div class="col-md-3 d-flex justify-content-center">
-                    <router-link class="btn btn-secondary mt-auto" :to="`/${wordbook.id}/words`">一覧</router-link>
+                    <router-link class="btn btn-success btn-list" :to="`/${wordbook.id}/words`">一覧</router-link>
                   </div>
                   <div class="col-md-3 d-flex justify-content-center">
-                    <a class="btn btn-primary mt-auto" @click="showModal(wordbook.id)">削除</a>
+                    <a class="btn btn-danger btn-list" @click="showModal(wordbook.id)">削除</a>
                   </div>
                 </div>
               </div>
@@ -163,13 +170,14 @@ export default {
   flex-direction: column;
 }
 
-.btn-success {
+.btn-list {
   margin-top: auto;
   width: 100%;
 }
 
-.btn-primary {
-  margin-top: auto;
-  width: 100%;
+.btn-orange {
+  background-color: orange;
+  color: white;
 }
+
 </style>

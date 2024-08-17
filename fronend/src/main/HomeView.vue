@@ -8,7 +8,8 @@
           <span class="text-gradient d-inline">自分だけの<br>英単語帳を<br>作ろう!</span>
         </h1>
         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content xxl-start mb-3">
-          <router-link class="btn btn-success btn-lg px-5 py-3 me-sm-3 fs-6 fw-boder" :to="{name: 'login'}">はじめる</router-link>
+          <router-link v-if="authStore.isAuth" class="btn btn-success btn-lg px-5 py-3 me-sm-3 fs-6 fw-boder" :to="{ path: `/${authStore.userId}/wordbooks` }">はじめる</router-link>
+          <router-link v-else class="btn btn-success btn-lg px-5 py-3 me-sm-3 fs-6 fw-boder" :to="{name: 'login'}">はじめる</router-link>
         </div>
         </div>
       </div>
@@ -25,7 +26,13 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
+
 export default {
+  setup() {
+    const authStore = useAuthStore();
+    return {authStore}
+  },
 
 }
 </script>

@@ -16,7 +16,7 @@ Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "users.login"
+login_manager.login_view = "loginapi"
 
 
 def localize_callback(*args, **kwargs):
@@ -45,12 +45,13 @@ from study_english.error_pages.handlers import error_pages
 # app.register_blueprint(error_pages)
 
 from flask_restful import Api
-from study_english.api import LoginApi, LogoutApi, AccountApi, CreateBookApi, RegisterApi, UsersApi, WordBooksApi, ImageApi, WordsApi, WordApi, AllWordsApi
+from study_english.api import LoginApi, LogoutApi, AccountApi, CreateBookApi, RegisterApi, UsersApi, WordBooksApi, ImageApi, WordsApi, WordApi, AllWordsApi, SpeakApi
 from flask_cors import CORS
 
 CORS(app)
 api = Api(app)
 api.add_resource(LoginApi, "/login")
+api.add_resource(SpeakApi, "/speak")
 api.add_resource(LogoutApi, "/logout")
 api.add_resource(RegisterApi, "/register")
 api.add_resource(UsersApi, "/users")

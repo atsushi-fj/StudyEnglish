@@ -21,14 +21,22 @@
 
 <script>
 import axios from 'axios';
+import { useAuthStore } from '@/stores/auth';
 
-export default {  
+export default {
+  setup() {
+    const authStore = useAuthStore();
+
+    function loginAuth() {
+      authStore.login();
+    }
+
+    return {authStore, loginAuth}
+  },
   data() {
     return {
         email: '',
         password: '',
-        userId: '',
-        isAdmin: '',
         loginStatus: '',
         message: '',
     };
@@ -44,12 +52,10 @@ export default {
         const response = await axios.post('http://127.0.0.1:5000/login', postData);
         this.loginStatus = response.data.status;
         if (this.loginStatus === "SUCCESS") {
-          localStorage.setItem('isAuthenticated', 'true');
-          this.userId = response.data.id;
-          this.isAdmin = response.data.admin;
-          localStorage.setItem('userId', this.userId);
-          localStorage.setItem('isAdmin', this.isAdmin);
-          this.$router.push(`${this.userId}/wordbooks`);
+          this.loginAuth();
+          this.authStore.userId = response.data.id;
+          this.authStore.isAdmin = parseInt(response.data.admin);
+          this.$router.push(`${this.authStore.userId}/wordbooks`);
         } else if (this.loginStatus === "PASSWORD FAIL") {
           localStorage.setItem('isAuthenticated', 'false');
           this.message = "パスワードが一致しません";

@@ -12,11 +12,11 @@
     <section id="menu">
       <div class="container my-3 py-3">
         <div class="row">
-          <div class="col-md-1 d-flex justify-content-center">
-            <router-link class="btn btn-danger" :to="`/${$route.params.wordbook_id}/create_word`">追加</router-link>
+          <div class="col-md-1 d-flex justify-content-center mb-3">
+            <router-link class="btn btn-secondary btn-menu" :to="`/${$route.params.wordbook_id}/create_word`">追加</router-link>
           </div>
-          <div class="col-md-1 d-flex justify-content-center">
-            <router-link class="btn btn-secondary" :to="`/${$route.params.wordbook_id}/create_word`">学習</router-link>
+          <div class="col-md-1 d-flex justify-content-center mb-3">
+            <router-link class="btn btn-success btn-menu" :to="`/${$route.params.wordbook_id}/start_learning`">学習</router-link>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
               <td>{{ index }}</td>
               <td>{{ word.english }}</td>
               <td>{{ word.japanese }}</td>
-              <td><a href="" class="btn btn-success" @click.prevent="showModal(word.id)">削除</a></td>
+              <td><a href="" class="btn btn-danger" @click.prevent="showModal(word.id)">削除</a></td>
             </tr>
           </tbody>
         </table>
@@ -162,12 +162,7 @@
   border: 1px solid #ddd;
 }
 
-.btn-danger {
-margin-top: auto;
-width: 100%;
-}
-
-.btn-secondary {
+.btn-menu {
 margin-top: auto;
 width: 100%;
 }

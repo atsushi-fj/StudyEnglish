@@ -1,13 +1,16 @@
-from flask import request
+from flask import request, send_file
 from flask_restful import Resource, reqparse
 from study_english.models import User, WordBook, Word
 from flask_login import login_user, logout_user, login_required, current_user
 from study_english.image_handler import add_featured_image
 import json
+from gtts import gTTS
 from flask import jsonify
 from study_english import db
 from flask import current_app, send_from_directory
+from sqlalchemy import func
 import os
+import io
 
 class LoginApi(Resource):
     
@@ -27,8 +30,7 @@ class LoginApi(Resource):
         
 class LogoutApi(Resource):
     
-    @login_required
-    def post(self):
+    def get(self):
         logout_user()
         return 
         
@@ -132,7 +134,7 @@ class WordBooksApi(Resource):
             page = int(request.args.get("page", 1))
             per_page = int(request.args.get("per_page", 10))
             wordbooks = WordBook.query.filter_by(user_id=user_id).order_by(
-                WordBook.id.desc()).paginate(page, per_page, False)
+                WordBook.id.asc()).paginate(page, per_page, False)
             return {
                 "total": wordbooks.total,
                 "pages": wordbooks.pages,
@@ -171,8 +173,15 @@ class WordsApi(Resource):
         try:
             page = int(request.args.get("page", 1))
             per_page = int(request.args.get("per_page", 10))
-            words = Word.query.filter_by(book_id=wordbook_id).order_by(
-                Word.id.desc()).paginate(page, per_page, False)
+            if request.args.get("sort_option") == "random":
+                words = Word.query.filter_by(book_id=wordbook_id).order_by(
+                    func.random()).distinct().paginate(page, per_page, False)
+            elif request.args.get("sort_option") == "asc":
+                words = Word.query.filter_by(book_id=wordbook_id).order_by(
+                    Word.id.asc()).paginate(page, per_page, False)
+            else:
+                words = Word.query.filter_by(book_id=wordbook_id).order_by(
+                    Word.id.desc()).paginate(page, per_page, False)
             return {
                 "total": words.total,
                 "pages": words.pages,
@@ -215,4 +224,16 @@ class WordApi(Resource):
             return {"status": "SUCCESS"}
         except:
             return {"status": "ERROR"}
-        
+
+class SpeakApi(Resource):
+    
+    def post(self):
+        try:
+            data = request.get_json()
+            tts = gTTS(data["text"], lang="en")
+            mp3_fp = io.BytesIO()
+            tts.write_to_fp(mp3_fp)
+            mp3_fp.seek(0)
+            return send_file(mp3_fp, mimetype="audio/mp3")
+        except:
+            return {"status": "ERROR"}
