@@ -1,112 +1,13 @@
-from flask import request, send_file
-from flask_restful import Resource, reqparse
-from study_english.models import User, WordBook, Word
-from flask_login import login_user, logout_user, login_required, current_user
+from flask import request, send_file, current_app, send_from_directory
+from flask_restful import Resource
+from study_english.models import WordBook, Word
 from study_english.image_handler import add_featured_image
-import json
 from gtts import gTTS
-from flask import jsonify
 from study_english import db
-from flask import current_app, send_from_directory
-from sqlalchemy import func
+from sqlalchemy import func, and_
 import os
 import io
 
-class LoginApi(Resource):
-    
-    def post(self):
-        try: 
-            data = request.get_json()
-            user = User.query.filter_by(email=data["email"]).first()
-            if user is not None:
-                if user.check_password(data["password"]):
-                    login_user(user)
-                    return {"status": "SUCCESS", "id": str(user.id), "admin": str(user.is_administrator())}
-                else:
-                    return {"status": "PASSWORD FAIL"}
-            return {"status": "USER FAIL"}
-        except Exception as e:
-            return {"status": "ERROR"}
-        
-class LogoutApi(Resource):
-    
-    def get(self):
-        logout_user()
-        return 
-        
-class RegisterApi(Resource):
-    
-    def post(self):
-        try:
-            data = request.get_json()
-            if User.query.filter_by(username=data['username']).first():
-                return {"status": "USESRNAME FAIL"}
-            if User.query.filter_by(email=data['email']).first():
-                return {"status": "EMAIL FAIL"}
-            user = User(email=data['email'], username=data['username'],
-                        password=data['password'], administrator="0")
-            db.session.add(user)
-            db.session.commit()
-            return {"status": "SUCCESS"}
-        except Exception as e:
-            return {"status": "ERROR"}
-
-class UsersApi(Resource):
-    
-    def get(self):
-        try:
-            page = int(request.args.get("page", 1))
-            per_page = int(request.args.get("per_page", 10))
-            users = User.query.paginate(page, per_page, False)
-            return {
-                "total": users.total,
-                "pages": users.pages,
-                "current_page": users.page,
-                "per_page": users.per_page,
-                "users": [user.to_dict() for user in users.items]                
-            }
-        except:
-            return {"status": "ERROR"}
-               
-                                
-class AccountApi(Resource):
-    
-    def get(self, user_id):
-        try:
-            user = User.query.get(user_id)
-            return {
-                "email": user.email,
-                "username": user.username,
-            }
-        except:
-            return {"status": "ERROR"}
-    
-    def put(self, user_id):
-        try:
-            data = request.get_json()
-            user = User.query.get(user_id)
-            if User.query.filter_by(username=data['username']).first():
-                return {"status": "USESRNAME FAIL"}
-            if User.query.filter_by(email=data['email']).first():
-                return {"status": "EMAIL FAIL"}
-            user.email = data["email"]
-            user.username = data["username"]
-            user.password = data["password"]
-            db.session.commit()
-            return {"status": "SUCCESS"}
-        except:
-            return {"status": "ERROR"}
-        
-    def delete(self, user_id):
-        try:
-            user = User.query.get(user_id)
-            db.session.delete(user)
-            db.session.commit()
-            return {"status": "SUCCESS"}
-        except:
-            return {"status": "ERROR"}
-        
-   
 
 class CreateBookApi(Resource):
     
@@ -126,7 +27,7 @@ class CreateBookApi(Resource):
         except:
             return {"status": "FAIL"}
 
- 
+
 class WordBooksApi(Resource):
     
     def get(self, user_id):
@@ -154,9 +55,45 @@ class WordBooksApi(Resource):
             return {"status": "SUCCESS"}
         except:
             return {"status": "ERROR"}
-        
+    
+    def patch(self, user_id):
+        try:
+            data = request.get_json()
+            book = WordBook.query.get(data["book_id"])
+            book.is_public = not book.is_public
+            db.session.commit()
+            return {"is_public": str(book.is_public)}
+        except:
+            return {"status": "ERROR"}
 
-  
+
+class PublicWordBooksApi(Resource):
+    
+    def get(self):
+        try:
+            keyword = request.args.get("q", "")
+            page = int(request.args.get("page", 1))
+            per_page = int(request.args.get("per_page", 10))
+            if keyword == "":
+                wordbooks = WordBook.query.filter_by(is_public=True).order_by(
+                    WordBook.id.desc()).paginate(page, per_page, False)
+            else:
+                wordbooks = WordBook.query.filter(and_(
+                    WordBook.is_public == True,
+                    WordBook.title.ilike(f'%{keyword}%'))).order_by(
+                    WordBook.id.desc()).paginate(page, per_page, False)
+                
+            return {
+                "total": wordbooks.total,
+                "pages": wordbooks.pages,
+                "current_page": wordbooks.page,
+                "per_page": wordbooks.per_page,
+                "wordbooks": [wordbook.to_dict() for wordbook in wordbooks.items],
+            }
+        except:
+            return {"status": "ERROR"}
+
+
 class ImageApi(Resource):
     
     def get(self, filename):
@@ -173,6 +110,9 @@ class WordsApi(Resource):
         try:
             page = int(request.args.get("page", 1))
             per_page = int(request.args.get("per_page", 10))
+            num_words = Word.query.filter_by(book_id=wordbook_id).count()
+            wordbook = WordBook.query.filter_by(id=wordbook_id).first()
+            user_id = wordbook.user_id
             if request.args.get("sort_option") == "random":
                 words = Word.query.filter_by(book_id=wordbook_id).order_by(
                     func.random()).distinct().paginate(page, per_page, False)
@@ -183,6 +123,8 @@ class WordsApi(Resource):
                 words = Word.query.filter_by(book_id=wordbook_id).order_by(
                     Word.id.desc()).paginate(page, per_page, False)
             return {
+                "user_id": str(user_id),
+                "num_words": num_words,
                 "total": words.total,
                 "pages": words.pages,
                 "current_page": words.page,
@@ -224,6 +166,7 @@ class WordApi(Resource):
             return {"status": "SUCCESS"}
         except:
             return {"status": "ERROR"}
+
 
 class SpeakApi(Resource):
     

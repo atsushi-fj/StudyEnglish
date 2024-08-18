@@ -39,6 +39,10 @@
                   <div class="col-md-3 d-flex justify-content-center">
                     <a class="btn btn-danger btn-list" @click="showModal(wordbook.id)">削除</a>
                   </div>
+                  <div class="col-md-5 d-flex justify-content-center">
+                    <button v-if="wordbook.is_public === 'True'" class="btn btn-secondary btn-list" @click="togglePublic(wordbook.id)">公開しない</button>
+                    <button v-else class="btn btn-secondary btn-list" @click="togglePublic(wordbook.id)">公開する</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -85,8 +89,13 @@
 <script>
 import axios from 'axios';
 import { Modal } from 'bootstrap';
+import { useAuthStore } from '@/stores/auth';
 
 export default {
+  setup() {
+    const authStore = useAuthStore();
+    return {authStore}
+  },
   data() {
     return {
         wordbooks: [],
@@ -109,6 +118,22 @@ export default {
         this.deleteStatus = response.data.status;
         this.hideModal();
         this.fetchBooks();
+      } catch(error) {
+        console.log(error)
+      }
+    },
+    async togglePublic(id = 1) {
+      const userId = this.$route.params.user_id;
+      try {
+        const response = await axios.patch(`http://127.0.0.1:5000/${userId}/wordbooks`, {
+            book_id: id,
+        });
+        if (response.data.is_public === 'True') {
+          this.authStore.publicBooks.push(id);
+        } else {
+          this.authStore.publicBooks = this.authStore.publicBooks.filter(book => book !== id)
+        }
+        this.fetchBooks(this.currentPage);
       } catch(error) {
         console.log(error)
       }

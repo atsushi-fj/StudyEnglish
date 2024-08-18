@@ -50,11 +50,13 @@ export default {
         };
 
         const response = await axios.post('http://127.0.0.1:5000/login', postData);
+        console.log(response.data)
         this.loginStatus = response.data.status;
         if (this.loginStatus === "SUCCESS") {
           this.loginAuth();
           this.authStore.userId = response.data.id;
           this.authStore.isAdmin = parseInt(response.data.admin);
+          this.authStore.username = response.data.username;
           this.$router.push(`${this.authStore.userId}/wordbooks`);
         } else if (this.loginStatus === "PASSWORD FAIL") {
           localStorage.setItem('isAuthenticated', 'false');

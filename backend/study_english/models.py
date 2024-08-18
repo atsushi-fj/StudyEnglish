@@ -3,12 +3,8 @@ from pytz import timezone
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from study_english import db, login_manager
+from study_english import db
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
 
 class User(db.Model, UserMixin):
     __tablename__ = "users"
@@ -19,6 +15,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     administrator = db.Column(db.String(1))
     book = db.relationship("WordBook", backref="author", lazy="dynamic")
+    word = db.relationship("Word", backref="author", lazy="dynamic")
     
     def __init__(self, email, username, password, administrator):
         self.email = email
@@ -62,6 +59,7 @@ class WordBook(db.Model):
     date = db.Column(db.DateTime, default=datetime.now(timezone("Asia/Tokyo")))
     title = db.Column(db.String(140))    
     featured_image = db.Column(db.String(140))
+    is_public = db.Column(db.Boolean, default=False)
     word = db.relationship("Word", backref="word", lazy="dynamic")
     
     def __init__(self, title, featured_image, user_id):
@@ -78,6 +76,8 @@ class WordBook(db.Model):
             "date": self.date.isoformat(),
             "title": self.title,
             "image": str(self.featured_image),
+            "is_public": str(self.is_public),
+            "author": str(self.author),
         }
     
     
@@ -85,6 +85,7 @@ class Word(db.Model):
     __tablename__ = "word"
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey("wordbook.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     english = db.Column(db.String[140])
     japanese  = db.Column(db.String[140])
     

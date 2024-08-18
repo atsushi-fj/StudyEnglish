@@ -13,10 +13,16 @@
             <router-link class="nav-link" :to="{ name: 'home' }">ホーム</router-link>
           </li>
           <li class="nav-item">
+            <router-link class="nav-link" :to="{ name: 'public_books' }">みんなの英単語帳</router-link>
+          </li>
+          <li v-if="authStore.isAuth" class="nav-item">
             <router-link class="nav-link" :to="{ path: `/${authStore.userId}/wordbooks` }">My英単語帳</router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="authStore.isAdmin === 1" class="nav-item">
             <router-link class="nav-link" :to="{ name: 'users' }">ユーザー</router-link>
+          </li>
+          <li v-if="authStore.username !== ''" class="nav-item">
+            <router-link class="nav-link" :to="{ path: `/${authStore.userId}/account` }">{{ authStore.username }}</router-link>
           </li>
           <li v-if="authStore.isAuth" class="nav-item">
             <button class="nav-link" @click="logout">ログアウト</button>
@@ -32,7 +38,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
 
 
@@ -49,16 +54,7 @@ export default {
   methods: {
     logout() {
       this.logoutAuth();
-
-      axios.get('http://127.0.0.1:5000/logout')
-        .then(response => {
-          console.log('Logged out', response.data)
-        })
-        .catch(error => {
-          console.error('Error logging out', error)
-        });
-
-        this.$router.push({ name: "login" });
+      this.$router.push({ name: "login" });
     },
   },
 };

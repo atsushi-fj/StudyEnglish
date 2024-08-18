@@ -5,6 +5,8 @@ export const useAuthStore = defineStore('auth', {
     isAuth: false,
     userId: 0,
     isAdmin: 0,
+    username: '',
+    publicBooks: [],
   }),
   actions: {
     login() {
@@ -14,6 +16,7 @@ export const useAuthStore = defineStore('auth', {
       this.isAuth = false;
       this.userId = 0;
       this.isAdmin = 0;
+      this.username = '';
     }
   }
 })

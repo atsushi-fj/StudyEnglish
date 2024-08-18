@@ -55,14 +55,15 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
       });
-        if (response.data.status === 'Create successful') {
-            this.message = '新しい英単語帳を作成しました。';
-        } else if (response.data.status === 'FAIL') {
-            this.message = '英単語帳を作成することができませんでした。';
-        }
-        } catch (error) {
-            console.log("error")
-        }
+      console.log(response.data)
+      if (response.data.status === 'Create successful') {
+          this.message = '新しい英単語帳を作成しました。';
+      } else if (response.data.status === 'FAIL') {
+          this.message = '英単語帳を作成することができませんでした。';
+      }
+      } catch (error) {
+          console.log("error")
+      }
     }
 
         }

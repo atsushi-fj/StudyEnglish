@@ -1,9 +1,0 @@
-{% macro render_fieled(fieled) %}
-{{ fieled(**kwargs)|safe }}
-{% if fieled.errors %}
-    <br>
-    {% for error in fieled.errors %}
-        {{ error }}
-    {% endfor %}
-{% endif %}
-{% endmacro %}

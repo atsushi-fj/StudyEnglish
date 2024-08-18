@@ -12,7 +12,7 @@
         <input v-model="password" type="password" placeholder="新パスワード" class="form-control mt-3" id="inputPassword" required autofocus>
         <input v-model="passConfirm" type="password" placeholder="新パスワード (確認)" class="form-control mt-3" id="inputPassconfirm" required autofocus>
         <button class="btn btn-lg btn-success btn-block mt-5 mx-3" type="submit" @click="update">更新</button>
-        <button class="btn btn-lg btn-danger btn-block mt-5 mx-3" type="button" @click="showModal">削除</button>
+        <button :disabled="authStore.isAdmin !== 1" class="btn btn-lg btn-danger btn-block mt-5 mx-3" type="button" @click="showModal">削除</button>
       </form>
     </body>
     <!-- Modal -->
@@ -39,8 +39,13 @@
 <script>
   import axios from 'axios';
   import { Modal } from 'bootstrap';
+  import { useAuthStore } from '@/stores/auth';
   
   export default {
+    setup() {
+      const authStore = useAuthStore();
+      return {authStore}
+    },
     data() {
       return {
         email: '',

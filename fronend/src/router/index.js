@@ -14,6 +14,7 @@ import CreateWord from '@/wordbook/CreateWord.vue'
 import LearnWord from '@/wordbook/LearnWord.vue'
 import EndLearning from '@/wordbook/EndLearning.vue'
 import StartLearning from '@/wordbook/StartLearning.vue'
+import PublicBooks from '@/wordbook/PublicBooks.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -77,7 +78,7 @@ const router = createRouter({
       components: {
         default: WordsView,
       },
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresPublic: true}
     },
     {
       path: '/:wordbook_id/create_word',
@@ -93,7 +94,7 @@ const router = createRouter({
       components: {
         default: LearnWord,
       },
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresPublic: true}
     },
     {
       path: '/:wordbook_id/start_learning',
@@ -101,7 +102,7 @@ const router = createRouter({
       components: {
         default: StartLearning,
       },
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresPublic: true}
     },
     {
       path: '/:wordbook_id/end_learning',
@@ -109,7 +110,14 @@ const router = createRouter({
       components: {
         default: EndLearning,
       },
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, requiresPublic: true}
+    },
+    {
+      path: '/public_books',
+      name: 'public_books',
+      components: {
+        default: PublicBooks,
+      },
     },
     {
       path: '/error403',
@@ -125,7 +133,6 @@ const router = createRouter({
         default: Error404View,
       }
     },
-
   ],
 })
 
@@ -133,11 +140,14 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+  const requiresPublic = to.matched.some(record => record.meta.requiresPublic);
   const isAuthenticated = authStore.isAuth === true;
   const isUser = to.params.id === authStore.userId;
   
   if (requiresAdmin && authStore.isAdmin === 0) {
     next({ name: 'error403'})
+  } else if (requiresPublic) {
+    next()
   } else if (requiresAuth && !isAuthenticated && !isUser) {
     next({ name: 'error403' })
   } else {

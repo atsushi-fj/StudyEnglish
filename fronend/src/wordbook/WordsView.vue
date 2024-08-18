@@ -5,14 +5,15 @@
         <div class="row">
           <div class="col-md-6 m-auto text-center">
             <h1>英単語一覧</h1>
+            <p>合計: {{ this.numWords }}個</p>
           </div>
         </div>
       </div>
     </header>
     <section id="menu">
-      <div class="container my-3 py-3">
+      <div class="container">
         <div class="row">
-          <div class="col-md-1 d-flex justify-content-center mb-3">
+          <div v-if="authStore.userId === this.userId" class="col-md-1 d-flex justify-content-center mb-3">
             <router-link class="btn btn-secondary btn-menu" :to="`/${$route.params.wordbook_id}/create_word`">追加</router-link>
           </div>
           <div class="col-md-1 d-flex justify-content-center mb-3">
@@ -29,15 +30,15 @@
               <th>ID</th>
               <th>英語</th>
               <th>日本語</th>
-              <th>削除</th>
+              <th v-if="authStore.userId === this.userId">削除</th>
             </tr>
           </thead>
           <tbody v-for="(word, index) in words" :key="index">
             <tr>
-              <td>{{ index }}</td>
+              <td>{{ calcWordId(index) }}</td>
               <td>{{ word.english }}</td>
               <td>{{ word.japanese }}</td>
-              <td><a href="" class="btn btn-danger" @click.prevent="showModal(word.id)">削除</a></td>
+              <td v-if="authStore.userId === this.userId"><a href="" class="btn btn-danger" @click.prevent="showModal(word.id)">削除</a></td>
             </tr>
           </tbody>
         </table>
@@ -81,11 +82,18 @@
   <script>
   import axios from 'axios';
   import { Modal } from 'bootstrap';
+  import { useAuthStore } from '@/stores/auth';
   
   export default {
+    setup() {
+      const authStore = useAuthStore();
+      return {authStore}
+    },
     data() {
       return {
           words: [],
+          userId: '0',
+          numWords: 0,
           totalPages: 0,
           currentPage: 1,
           perPage: 7,
@@ -118,8 +126,10 @@
                   per_page: this.perPage,
                 }
               });
-              console.log(response.data)
               this.words = response.data.words;
+              this.userId = response.data.user_id;
+              console.log(this.userId, this.authStore.userId)
+              this.numWords = response.data.num_words;
               this.totalPages = response.data.pages;
               this.currentPage = response.data.current_page;
             } catch(error) {
@@ -140,7 +150,10 @@
           const modalElement = document.getElementById('delModal');
           const modal = Modal.getInstance(modalElement);
           modal.hide();
-        }
+        },
+        calcWordId(index) {
+        return ((index + 1) + (this.perPage * (this.currentPage - 1)));
+      }
       },
       mounted() {
         this.fetchWords();
