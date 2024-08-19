@@ -4,29 +4,29 @@
       <div class="alert alert-warning mt-3" role="alert">{{ message }}</div>
     </div>
     <div class="container mt-5">
-    <div class="row">
+      <div class="row">
         <div class="col-md-6 offset-md-3">
+          <div class="mb-3">
+            <h3>英単語帳の作成</h3>
+          </div>
+          <form @submit.prevent="createBook" class="shadow p-4">
             <div class="mb-3">
-                <h3>英単語帳の作成</h3>
+              <label for="title">タイトル</label>
+              <input v-model="title" type="text" class="form-control" name="title" id="title" placeholder="タイトル">
             </div>
-            <form @submit.prevent="createBook" class="shadow p-4">
-                <div class="mb-3">
-                    <label for="title">タイトル</label>
-                    <input v-model="title" type="text" class="form-control" name="title" id="title" placeholder="タイトル">
-                </div>
-                <div class="mb-3">
-                    <label for="image">画像のアップロード</label>
-                    <br>
-                    <input type="file" id="image" @change="onFileChange">
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-success">作成</button>
-                </div>
-            </form>
+            <div class="mb-3">
+              <label for="image">画像のアップロード</label>
+              <br>
+              <input type="file" id="image" @change="onFileChange">
+            </div>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-success">作成</button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-  </div>
-</div>  
+  </div>  
 </template>
 
 <script>
@@ -38,7 +38,6 @@ export default {
     title: '',
     picture: null,
     message: '',
-    createStatus: '',
     };
   },
   methods: {
@@ -55,7 +54,6 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
       });
-      console.log(response.data)
       if (response.data.status === 'Create successful') {
           this.message = '新しい英単語帳を作成しました。';
       } else if (response.data.status === 'FAIL') {
@@ -65,11 +63,8 @@ export default {
           console.log("error")
       }
     }
-
-        }
-
-    }
-
+  }
+}
 </script>
 
 <style>

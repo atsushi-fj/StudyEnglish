@@ -82,8 +82,6 @@
           totalPages: 0,
           currentPage: 1,
           perPage: 3,
-          deleteBookId: 1,
-          deleteStatus: '',
           searchQuery: '',
           tempSearchQuery: '',
       };
@@ -119,63 +117,61 @@
         this.fetchBooks();
       }
   };
-  </script>
+</script>
   
-  <style scoped>
-  .card {
-    max-height: 30rem;
-  }
-  
-  .card-img-top {
-    max-height: 15rem;
-    object-fit: cover;
-    width: 100%;
-  }
-  
-  .card-body {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .btn-list {
-    margin-top: auto;
-    width: 100%;
-  }
-  
-  .btn-orange {
-    background-color: orange;
-    color: white;
-  }
+<style scoped>
+.card {
+  max-height: 30rem;
+}
 
-  .choices__list {
-    margin: 0;
-    padding-left: 0;
-    list-style: none
+.card-img-top {
+  max-height: 15rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-list {
+  margin-top: auto;
+  width: 100%;
+}
+
+.btn-orange {
+  background-color: orange;
+  color: white;
+}
+
+.choices__list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none
 }
   
 .choices__list--multiple {
-    display: inline
+  display: inline
 }
 
 .s004 form .inner-form .input-field .choices .choices__inner {
-    min-height: 70px;
-    width: 100%;
-    background: 0 0;
-    border: 0;
-    background: #fff;
-    display: block;
-    width: 100%;
-    padding: 10px 70px 10px 32px;
-    font-size: 18px;
-    color: #666;
-    border-radius: 34px;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -ms-flex-align: center;
-    align-items: center
+  min-height: 70px;
+  width: 100%;
+  background: 0 0;
+  border: 0;
+  background: #fff;
+  display: block;
+  width: 100%;
+  padding: 10px 70px 10px 32px;
+  font-size: 18px;
+  color: #666;
+  border-radius: 34px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center
 }
-
-  </style>
-  
+</style>

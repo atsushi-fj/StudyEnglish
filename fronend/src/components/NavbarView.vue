@@ -34,12 +34,10 @@
       </div>
     </div>
   </nav>
-
 </template>
 
 <script>
 import { useAuthStore } from '@/stores/auth';
-
 
 export default {
   setup() {
@@ -58,9 +56,7 @@ export default {
     },
   },
 };
-
 </script>
 
 <style>
-
 </style>

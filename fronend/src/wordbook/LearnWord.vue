@@ -29,8 +29,8 @@
       </div>
     </div>
   </div>
-  <transition name="fade" @after-enter="animationEnd(currentPage + 1)">
-    <div v-if="showMessage" :class="animationClass" class="message-container">
+    <transition name="fade" @after-enter="animationEnd(currentPage + 1)">
+      <div v-if="showMessage" :class="animationClass" class="message-container">
         <div v-if="answer === correctAnswer" class="message correct">
           <span class="icon correct-icon"></span>
           <p class="pt-5 mt-5 ans-size"><strong>正解！</strong></p>
@@ -41,28 +41,25 @@
           <p class="mt-3 ans-size">正しい答え: {{ correctAnswer }}</p>
         </div>
       </div>
-  </transition>
+    </transition>
   </div>
 </template>
   
-  <script>
-  import axios from 'axios';
+<script>
+import axios from 'axios';
   
-  export default {
-    data() {
-      return {
-          words: [],
-          totalPages: 0,
-          currentPage: 1,
-          perPage: 1,
-          deleteWordId: 1,
-          deleteStatus: '',
-          answer: '',
-          correctAnswer: '',
-          showMessage: false,
-          animationClass: '',
-          endLeanring: false,
-          numCorrect: 0,
+export default {
+  data() {
+    return {
+      words: [],
+      totalPages: 0,
+      currentPage: 1,
+      perPage: 1,
+      answer: '',
+      correctAnswer: '',
+      showMessage: false,
+      animationClass: '',
+      numCorrect: 0,
       };
     },
     computed: {
@@ -142,18 +139,6 @@
 </script>
   
 <style scoped>
-.centered-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.centered-table th,
-.centered-table td {
-  text-align: center;
-  vertical-align: middle;
-  padding: 8px;
-  border: 1px solid #ddd;
-}
 
 .word-size {
   font-size: 5vw;
@@ -249,5 +234,4 @@
   height: 20px;
   background-color: #4caf50;
 }
-
 </style>

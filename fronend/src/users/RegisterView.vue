@@ -4,23 +4,23 @@
       <div class="alert alert-danger mt-3" role="alert">{{ message }}</div>
     </div>
     <body class="text-center">
-    <form @submit.prevent="register" action="" class="form-signin">
-      <h1 class="h3 mb-3 font-weight-normal">会員登録</h1>
-      <p class="no-wrap-text">サービスのご利用には会員登録が必要です。</p>
-      <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
-      <input v-model="username" type="text" placeholder="ユーザー名" class="form-control mt-3" id="inputUserName" required autofocus>
-      <input v-model="password" type="password" placeholder="パスワード" class="form-control mt-3" id="inputPassword" required autofocus>
-      <input v-model="passConfirm" type="password" placeholder="パスワード (確認)" class="form-control mt-3" id="inputPassconfirm" required autofocus>
-      <button class="btn btn-lg btn-success btn-block mt-5" type="submit" @click="register">登録</button>
-      <br>
-      <br>
-      <hr>
-      <router-link style="text-decoration: none;" :to="{name: 'login'}">ログインはこちら</router-link>
-    </form>
-  </body>
+      <form @submit.prevent="register" action="" class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">会員登録</h1>
+        <p class="no-wrap-text">サービスのご利用には会員登録が必要です。</p>
+        <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
+        <input v-model="username" type="text" placeholder="ユーザー名" class="form-control mt-3" id="inputUserName" required autofocus>
+        <input v-model="password" type="password" placeholder="パスワード" class="form-control mt-3" id="inputPassword" required autofocus>
+        <input v-model="passConfirm" type="password" placeholder="パスワード (確認)" class="form-control mt-3" id="inputPassconfirm" required autofocus>
+        <button class="btn btn-lg btn-success btn-block mt-5" type="submit" @click="register">登録</button>
+        <br>
+        <br>
+        <hr>
+        <router-link style="text-decoration: none;" :to="{name: 'login'}">ログインはこちら</router-link>
+      </form>
+    </body>
   </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
 

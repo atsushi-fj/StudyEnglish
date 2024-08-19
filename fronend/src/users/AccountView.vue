@@ -1,9 +1,9 @@
 <template>
-    <div class="main">
-      <div v-if="message" class="container">
-        <div class="alert alert-danger mt-3" role="alert">{{ message }}</div>
-      </div>
-      <body class="text-center">
+  <div class="main">
+    <div v-if="message" class="container">
+      <div class="alert alert-danger mt-3" role="alert">{{ message }}</div>
+    </div>
+    <body class="text-center">
       <form @submit.prevent="update" action="" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">ユーザー更新</h1>
         <p>ユーザー情報を更新してください。</p>
@@ -17,25 +17,25 @@
     </body>
     <!-- Modal -->
     <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
-          <button type="button" class="btn-close" @click="hideModal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>このユーザーを削除しますか?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" @click="deleteUser">削除する</button>
-          <button type="button" class="btn btn-secondary" @click="hideModal">キャンセル</button>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
+            <button type="button" class="btn-close" @click="hideModal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>このユーザーを削除しますか?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" @click="deleteUser">削除する</button>
+            <button type="button" class="btn btn-secondary" @click="hideModal">キャンセル</button>
+          </div>
         </div>
       </div>
     </div>
-    </div>
   </div>
 </template>
-    
+
 <script>
   import axios from 'axios';
   import { Modal } from 'bootstrap';
@@ -168,5 +168,5 @@
   .form-signin .form-control:focus {
     z-index: 2;
   }
-  
   </style>
+  

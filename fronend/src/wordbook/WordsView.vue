@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+  <div class="main">
     <header id="page-header">
       <div class="container my-3 py-3">
         <div class="row">
@@ -45,7 +45,7 @@
       </div>
     </section>
     <div class="container d-flex justify-content-center">
-    <nav aria-label="Page navigation">
+      <nav aria-label="Page navigation">
         <ul class="pagination">
           <li class="page-item" :class="{ disabled: currentPage === 1 }">
             <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
@@ -60,105 +60,104 @@
       </nav>
     </div>
     <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
-          <button type="button" class="btn-close" @click="hideModal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>この英単語帳を削除しますか?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" @click="deleteWord(deleteWordId)">削除する</button>
-          <button type="button" class="btn btn-secondary" @click="hideModal">キャンセル</button>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
+            <button type="button" class="btn-close" @click="hideModal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>この英単語帳を削除しますか?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" @click="deleteWord(deleteWordId)">削除する</button>
+            <button type="button" class="btn btn-secondary" @click="hideModal">キャンセル</button>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    </div>
-  </template>
+  </div>
+</template>
   
-  <script>
-  import axios from 'axios';
-  import { Modal } from 'bootstrap';
-  import { useAuthStore } from '@/stores/auth';
-  
-  export default {
-    setup() {
-      const authStore = useAuthStore();
-      return {authStore}
+<script>
+import axios from 'axios';
+import { Modal } from 'bootstrap';
+import { useAuthStore } from '@/stores/auth';
+
+export default {
+  setup() {
+    const authStore = useAuthStore();
+    return {authStore}
+  },
+  data() {
+    return {
+        words: [],
+        userId: '0',
+        numWords: 0,
+        totalPages: 0,
+        currentPage: 1,
+        perPage: 7,
+        deleteWordId: 1,
+        deleteStatus: '',
+    };
+  },
+  methods: {
+    async deleteWord(id = 1) {
+      const wordbookId = this.$route.params.wordbook_id;
+      try {
+        const response = await axios.delete(`http://127.0.0.1:5000/${wordbookId}/word`, {
+          data: {
+            word_id: id,
+          }
+        });
+        this.deleteStatus = response.data.status;
+        this.hideModal();
+        this.fetchWords();
+      } catch(error) {
+        console.log(error)
+      }
     },
-    data() {
-      return {
-          words: [],
-          userId: '0',
-          numWords: 0,
-          totalPages: 0,
-          currentPage: 1,
-          perPage: 7,
-          deleteWordId: 1,
-          deleteStatus: '',
-      };
-    },
-    methods: {
-      async deleteWord(id = 1) {
+    async fetchWords(page = 1) {
+      try {
         const wordbookId = this.$route.params.wordbook_id;
-        try {
-          const response = await axios.delete(`http://127.0.0.1:5000/${wordbookId}/word`, {
-            data: {
-              word_id: id,
+        const response = await axios.get(`http://127.0.0.1:5000/${wordbookId}/words`, {
+            params: {
+              page: page,
+              per_page: this.perPage,
             }
-          });
-          this.deleteStatus = response.data.status;
-          this.hideModal();
-          this.fetchWords();
-        } catch(error) {
-          console.log(error)
-        }
-      },
-      async fetchWords(page = 1) {
-        try {
-            const wordbookId = this.$route.params.wordbook_id;
-            const response = await axios.get(`http://127.0.0.1:5000/${wordbookId}/words`, {
-                params: {
-                  page: page,
-                  per_page: this.perPage,
-                }
-              });
-              this.words = response.data.words;
-              this.userId = response.data.user_id;
-              console.log(this.userId, this.authStore.userId)
-              this.numWords = response.data.num_words;
-              this.totalPages = response.data.pages;
-              this.currentPage = response.data.current_page;
-            } catch(error) {
-              console.log(error);
-            }
-          },
-      changePage(page) {
-          if (page >= 1 && page <= this.totalPages) {
-              this.fetchWords(page);
+            });
+            this.words = response.data.words;
+            this.userId = response.data.user_id;
+            this.numWords = response.data.num_words;
+            this.totalPages = response.data.pages;
+            this.currentPage = response.data.current_page;
+          } catch(error) {
+            console.log(error);
           }
         },
-        showModal(id) {
-          this.deleteWordId = id
-          const modal = new Modal(document.getElementById('delModal'));
-          modal.show();
-        },
-        hideModal() {
-          const modalElement = document.getElementById('delModal');
-          const modal = Modal.getInstance(modalElement);
-          modal.hide();
-        },
-        calcWordId(index) {
-        return ((index + 1) + (this.perPage * (this.currentPage - 1)));
-      }
+    changePage(page) {
+        if (page >= 1 && page <= this.totalPages) {
+            this.fetchWords(page);
+        }
       },
-      mounted() {
-        this.fetchWords();
-      }
-  };
+      showModal(id) {
+        this.deleteWordId = id
+        const modal = new Modal(document.getElementById('delModal'));
+        modal.show();
+      },
+      hideModal() {
+        const modalElement = document.getElementById('delModal');
+        const modal = Modal.getInstance(modalElement);
+        modal.hide();
+      },
+      calcWordId(index) {
+      return ((index + 1) + (this.perPage * (this.currentPage - 1)));
+    }
+    },
+    mounted() {
+      this.fetchWords();
+    }
+};
 </script>
   
 <style scoped>
@@ -180,4 +179,3 @@ margin-top: auto;
 width: 100%;
 }
 </style>
-  

@@ -125,14 +125,9 @@ export default {
     async togglePublic(id = 1) {
       const userId = this.$route.params.user_id;
       try {
-        const response = await axios.patch(`http://127.0.0.1:5000/${userId}/wordbooks`, {
+        axios.patch(`http://127.0.0.1:5000/${userId}/wordbooks`, {
             book_id: id,
         });
-        if (response.data.is_public === 'True') {
-          this.authStore.publicBooks.push(id);
-        } else {
-          this.authStore.publicBooks = this.authStore.publicBooks.filter(book => book !== id)
-        }
         this.fetchBooks(this.currentPage);
       } catch(error) {
         console.log(error)

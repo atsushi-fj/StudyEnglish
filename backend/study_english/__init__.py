@@ -25,7 +25,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 from flask_restful import Api
 from study_english.user_api import LoginApi, AccountApi, RegisterApi, UsersApi
-from study_english.wordbook_api import CreateBookApi, WordBooksApi, ImageApi, WordsApi, WordApi, AllWordsApi, SpeakApi, PublicWordBooksApi
+from study_english.wordbook_api import CreateBookApi, WordBooksApi, ImageApi, WordsApi, WordApi, AllWordsApi, SpeakApi, PublicWordBooksApi, WordBookApi
 from flask_cors import CORS
 
 CORS(app)
@@ -41,4 +41,5 @@ api.add_resource(ImageApi, "/images/<string:filename>")
 api.add_resource(WordsApi, "/<int:wordbook_id>/words")
 api.add_resource(WordApi, "/<int:wordbook_id>/word")
 api.add_resource(AllWordsApi, "/<int:wordbook_id>/all_words")
+api.add_resource(WordBookApi, "/<int:wordbook_id>/get_wordbook_id")
 api.add_resource(PublicWordBooksApi, "/public_wordbooks")

@@ -15,6 +15,7 @@ import LearnWord from '@/wordbook/LearnWord.vue'
 import EndLearning from '@/wordbook/EndLearning.vue'
 import StartLearning from '@/wordbook/StartLearning.vue'
 import PublicBooks from '@/wordbook/PublicBooks.vue'
+import axios from 'axios'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -136,24 +137,32 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
   const requiresPublic = to.matched.some(record => record.meta.requiresPublic);
   const isAuthenticated = authStore.isAuth === true;
   const isUser = to.params.id === authStore.userId;
-  
+  let isPublicBook = false
+
+  if (to.name === 'words') {
+    try {
+      const respose = await axios.get(`http://127.0.0.1:5000/${to.params.wordbook_id}/get_wordbook_id`);
+      isPublicBook = respose.data.is_public;
+    } catch(error) {
+      console.log(error)
+    }
+  }
   if (requiresAdmin && authStore.isAdmin === 0) {
-    next({ name: 'error403'})
-  } else if (requiresPublic) {
+    next({ name: 'error403'});
+  } else if (requiresPublic && isPublicBook) {
     next()
   } else if (requiresAuth && !isAuthenticated && !isUser) {
-    next({ name: 'error403' })
+    next({ name: 'error403' });
   } else {
-    next()
+    next();
   }
 })
-
 
 export default router

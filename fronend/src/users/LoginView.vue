@@ -1,10 +1,10 @@
 <template>
   <div class="main">
     <div v-if="message" class="container">
-      <div class="alert alert-danger mt-3" role="alert">{{ message }}a</div>
+      <div class="alert alert-danger mt-3" role="alert">{{ message }}</div>
     </div>
-  <div id="body" class="text-center">
-    <form @submit.prevent="login" action="" class="form-signin">
+    <div id="body" class="text-center">
+      <form @submit.prevent="login" action="" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">ログイン</h1>
         <p>サービスのご利用には会員登録が必要です。</p>
         <input v-model="email" type="email" placeholder="メールアドレス" class="form-control mt-5" id="inputEmail" required autofocus>
@@ -14,7 +14,7 @@
         <br>
         <hr>
         <router-link style="text-decoration: none;" :to="{name: 'register'}">会員登録はこちら</router-link>
-    </form>
+      </form>
     </div>
   </div>
 </template>
@@ -50,7 +50,6 @@ export default {
         };
 
         const response = await axios.post('http://127.0.0.1:5000/login', postData);
-        console.log(response.data)
         this.loginStatus = response.data.status;
         if (this.loginStatus === "SUCCESS") {
           this.loginAuth();

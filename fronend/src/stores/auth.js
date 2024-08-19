@@ -6,7 +6,6 @@ export const useAuthStore = defineStore('auth', {
     userId: 0,
     isAdmin: 0,
     username: '',
-    publicBooks: [],
   }),
   actions: {
     login() {

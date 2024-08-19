@@ -28,6 +28,16 @@ class CreateBookApi(Resource):
             return {"status": "FAIL"}
 
 
+class WordBookApi(Resource):
+    
+    def get(self, wordbook_id):
+        try:
+            wordbook = WordBook.query.get(wordbook_id)
+            return {"is_public": wordbook.is_public}
+        except:
+            return {"status": "ERROR"}
+        
+
 class WordBooksApi(Resource):
     
     def get(self, user_id):
@@ -150,6 +160,8 @@ class WordApi(Resource):
     def put(self, wordbook_id):
         try:
             data = request.get_json()
+            if Word.query.filter_by(book_id=wordbook_id, english=data["english"]).first():
+                return {"status": "English FAIL"}
             word = Word(japanese=data["japanese"], english=data["english"], book_id=wordbook_id)
             db.session.add(word)
             db.session.commit()
