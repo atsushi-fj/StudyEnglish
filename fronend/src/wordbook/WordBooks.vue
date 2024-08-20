@@ -145,6 +145,7 @@ export default {
                 'Content-Type': 'multipart/form-data'
               }
             });
+            console.log(response.data)
             this.wordbooks = response.data.wordbooks;
             this.totalPages = response.data.pages;
             this.currentPage = response.data.current_page;

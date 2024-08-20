@@ -45,7 +45,7 @@ class WordBooksApi(Resource):
             page = int(request.args.get("page", 1))
             per_page = int(request.args.get("per_page", 10))
             wordbooks = WordBook.query.filter_by(user_id=user_id).order_by(
-                WordBook.id.asc()).paginate(page, per_page, False)
+                WordBook.id.asc()).paginate(page, per_page, False)            
             return {
                 "total": wordbooks.total,
                 "pages": wordbooks.pages,
