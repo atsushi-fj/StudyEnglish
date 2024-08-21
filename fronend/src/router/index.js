@@ -59,7 +59,7 @@ const router = createRouter({
     },
     {
       path: '/:user_id/wordbooks',
-      name: '/:user_id/wordbooks',
+      name: 'wordbooks',
       components: {
         default: WordBooks,
       },
@@ -83,7 +83,7 @@ const router = createRouter({
     },
     {
       path: '/:wordbook_id/create_word',
-      name: '/:wordbook_id/create_word',
+      name: 'create_word',
       components: {
         default: CreateWord,
       },
@@ -91,7 +91,7 @@ const router = createRouter({
     },
     {
       path: '/:wordbook_id/learn_word',
-      name: '/:wordbook_id/learn_word',
+      name: 'learn_word',
       components: {
         default: LearnWord,
       },
@@ -99,7 +99,7 @@ const router = createRouter({
     },
     {
       path: '/:wordbook_id/start_learning',
-      name: '/:wordbook_id/start_learning',
+      name: 'start_learning',
       components: {
         default: StartLearning,
       },
@@ -107,7 +107,7 @@ const router = createRouter({
     },
     {
       path: '/:wordbook_id/end_learning',
-      name: '/:wordbook_id/end_learning',
+      name: 'end_learning',
       components: {
         default: EndLearning,
       },
@@ -146,9 +146,9 @@ router.beforeEach(async (to, from, next) => {
   const isUser = to.params.id === authStore.userId;
   let isPublicBook = false
 
-  if (to.name === 'words') {
+  if (to.name === 'words' || to.name === 'start_learning' || to.name === 'learn_word' || to.name === 'end_learning') {
     try {
-      const respose = await axios.get(`http://127.0.0.1:5000/${to.params.wordbook_id}/get_wordbook_id`);
+      const respose = await axios.get(`http://18.177.110.46/${to.params.wordbook_id}/get_wordbook_id`);
       isPublicBook = respose.data.is_public;
     } catch(error) {
       console.log(error)

@@ -105,7 +105,7 @@ export default {
     async deleteWord(id = 1) {
       const wordbookId = this.$route.params.wordbook_id;
       try {
-        const response = await axios.delete(`http://127.0.0.1:5000/${wordbookId}/word`, {
+        const response = await axios.delete(`http://18.177.110.46/${wordbookId}/word`, {
           data: {
             word_id: id,
           }
@@ -120,7 +120,7 @@ export default {
     async fetchWords(page = 1) {
       try {
         const wordbookId = this.$route.params.wordbook_id;
-        const response = await axios.get(`http://127.0.0.1:5000/${wordbookId}/words`, {
+        const response = await axios.get(`http://18.177.110.46/${wordbookId}/words`, {
             params: {
               page: page,
               per_page: this.perPage,

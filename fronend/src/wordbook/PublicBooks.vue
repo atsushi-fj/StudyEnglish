@@ -32,7 +32,7 @@
             <div class="card h-100">
               <div class="card-body d-flex flex-column">
                 <div class="mb-3 flex-grow-1 d-flex align-items-center justify-content-center">
-                  <img :src="`http://127.0.0.1:5000/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top">
+                  <img :src="`http://18.177.110.46/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top">
                 </div>
                 <h3>
                   <a href="" class="card-title text-decoration-none">
@@ -90,7 +90,7 @@
       async fetchBooks(page = 1) {
         try {
             this.searchQuery = this.tempSearchQuery;
-            const response = await axios.get('http://127.0.0.1:5000/public_wordbooks', {
+            const response = await axios.get('http://18.177.110.46/public_wordbooks', {
                 params: {
                   q: this.searchQuery,
                   page: page,
