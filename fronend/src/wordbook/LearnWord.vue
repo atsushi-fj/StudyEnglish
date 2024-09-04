@@ -174,9 +174,9 @@ export default {
 }
 
 .correct-icon {
-  border-radius: 50%; /* 円形にする */
-  border: 1vw solid; /* 円の枠線の太さ */
-  box-sizing: border-box; /* ボーダーをサイズに含める */
+  border-radius: 50%;
+  border: 1vw solid;
+  box-sizing: border-box;
   border-color: red;
 }
 

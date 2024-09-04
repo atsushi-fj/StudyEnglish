@@ -16,32 +16,33 @@
       </div>
     </div>
   </div>
-  <section id="list">
-    <div class="container my-3">
-      <div class="row">
-        <div class="col-4 mb-4" v-for="wordbook in wordbooks" :key="wordbook.image">
-          <div class="card h-100">
-            <div class="card-body d-flex flex-column">
-              <div class="mb-3 flex-grow-1 d-flex align-items-center justify-content-center">
-                <img :src="`http://18.177.110.46/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top">
-              </div>
-              <h3>
-                <a href="" class="card-title text-decoration-none">
-                  <span>{{ wordbook.title }}</span>
-                </a>
-              </h3>
-              <p>{{ wordbook.date.slice(0, 10) }}</p>
-              <div class="container">
-                <div class="row">
-                  <div class="col-md-3 d-flex justify-content-center">
-                    <router-link class="btn btn-success btn-list" :to="`/${wordbook.id}/words`">一覧</router-link>
-                  </div>
-                  <div class="col-md-3 d-flex justify-content-center">
-                    <a class="btn btn-danger btn-list" @click="showModal(wordbook.id)">削除</a>
-                  </div>
-                  <div class="col-md-5 d-flex justify-content-center">
-                    <button v-if="wordbook.is_public === 'True'" class="btn btn-secondary btn-list" @click="togglePublic(wordbook.id)">公開しない</button>
-                    <button v-else class="btn btn-secondary btn-list" @click="togglePublic(wordbook.id)">公開する</button>
+    <section id="list">
+      <div class="container my-3">
+        <div class="row">
+          <div class="col-4 mb-4" v-for="wordbook in wordbooks" :key="wordbook.image">
+            <div class="card h-100">
+              <div class="card-body d-flex flex-column">
+                <div class="mb-3 flex-grow-1 d-flex align-items-center justify-content-center">
+                  <img :src="`http://18.177.110.46/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top">
+                </div>
+                <h3>
+                  <a href="" class="card-title text-decoration-none">
+                    <span>{{ wordbook.title }}</span>
+                  </a>
+                </h3>
+                <p>{{ wordbook.date.slice(0, 10) }}</p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-3 d-flex justify-content-center">
+                      <router-link class="btn btn-success btn-list" :to="`/${wordbook.id}/words`">一覧</router-link>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-center">
+                      <a class="btn btn-danger btn-list" @click="showDelModal(wordbook.id)">削除</a>
+                    </div>
+                    <div class="col-md-5 d-flex justify-content-center">
+                      <button v-if="wordbook.is_public === 'True'" class="btn btn-dark btn-list" @click="showPublicModal(wordbook.id)">公開しない</button>
+                      <button v-else class="btn btn-dark btn-list" @click="showPublicModal(wordbook.id)">公開する</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -49,39 +50,55 @@
           </div>
         </div>
       </div>
+    </section>
+    <div class="container d-flex justify-content-center">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" :class="{ disabled: currentPage === 1 }">
+            <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
+          </li>
+          <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+            <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+          </li>
+          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+            <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Next</a>
+          </li>
+        </ul>
+      </nav>
     </div>
-  </section>
-  <div class="container d-flex justify-content-center">
-  <nav aria-label="Page navigation">
-      <ul class="pagination">
-        <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
-        </li>
-        <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
-          <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
-        </li>
-        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-          <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
-          <button type="button" class="btn-close" @click="hideModal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>この英単語帳を削除しますか?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" @click="deleteBook(deleteBookId)">削除する</button>
-          <button type="button" class="btn btn-secondary" @click="hideModal">キャンセル</button>
+    <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
+            <button type="button" class="btn-close" @click="hideDelModal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>この英単語帳を削除しますか?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" @click="deleteBook(deleteBookId)">削除する</button>
+            <button type="button" class="btn btn-secondary" @click="hideDelModal">キャンセル</button>
+          </div>
         </div>
       </div>
     </div>
+    <div class="modal fade" id="publicModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">公開確認</h1>
+            <button type="button" class="btn-close" @click="hidePublicModal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>この英単語帳を公開しますか?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" @click="publicBook(publicBookId)">公開する</button>
+            <button type="button" class="btn btn-secondary" @click="hidePublicModal">キャンセル</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -104,6 +121,8 @@ export default {
         perPage: 3,
         deleteBookId: 1,
         deleteStatus: '',
+        publicBookId: 1,
+        publicStatus: '',
     };
   },
   methods: {
@@ -116,19 +135,21 @@ export default {
           }
         });
         this.deleteStatus = response.data.status;
-        this.hideModal();
+        this.hideDelModal();
         this.fetchBooks();
       } catch(error) {
         console.log(error)
       }
     },
-    async togglePublic(id = 1) {
+    async publicBook(id = 1) {
       const userId = this.$route.params.user_id;
       try {
-        axios.patch(`http://18.177.110.46/${userId}/wordbooks`, {
+        const response = await axios.patch(`http://18.177.110.46/${userId}/wordbooks`, {
             book_id: id,
         });
-        this.fetchBooks(this.currentPage);
+        this.publicStatus = response.data.status;
+        this.hidePublicModal();
+        this.fetchBooks();
       } catch(error) {
         console.log(error)
       }
@@ -145,7 +166,6 @@ export default {
                 'Content-Type': 'multipart/form-data'
               }
             });
-            console.log(response.data)
             this.wordbooks = response.data.wordbooks;
             this.totalPages = response.data.pages;
             this.currentPage = response.data.current_page;
@@ -158,13 +178,23 @@ export default {
             this.fetchBooks(page);
         }
       },
-      showModal(id) {
+      showDelModal(id) {
         this.deleteBookId = id
         const modal = new Modal(document.getElementById('delModal'));
         modal.show();
       },
-      hideModal() {
+      hideDelModal() {
         const modalElement = document.getElementById('delModal');
+        const modal = Modal.getInstance(modalElement);
+        modal.hide();
+      },
+      showPublicModal(id) {
+        this.publicBookId = id
+        const modal = new Modal(document.getElementById('publicModal'));
+        modal.show();
+      },
+      hidePublicModal() {
+        const modalElement = document.getElementById('publicModal');
         const modal = Modal.getInstance(modalElement);
         modal.hide();
       }

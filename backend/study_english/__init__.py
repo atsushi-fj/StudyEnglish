@@ -6,8 +6,8 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "mysecretkey"
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "data.sqlite")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://fujita:Atsushi2001!@study-english.chg6ewgwi4tb.ap-northeast-1.rds.amazonaws.com/study-english"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -17,11 +17,13 @@ from sqlalchemy.engine import Engine
 from sqlalchemy import event
 
 
-@event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
+def set_sqlite_pragma(db_conn):
+    if db_conn.engine.name == 'sqlite':
+        cursor = db_conn.connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+    elif db_conn.engine.name == 'mysql':
+        cursor = db_conn.connection.cursor()
+        cursor.execute("SET foreign_key_checks = 1")
 
 from flask_restful import Api
 from study_english.user_api import LoginApi, AccountApi, RegisterApi, UsersApi

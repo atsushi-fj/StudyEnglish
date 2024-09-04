@@ -85,8 +85,8 @@ class Word(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey("wordbook.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    english = db.Column(db.String[140])
-    japanese  = db.Column(db.String[140])
+    english = db.Column(db.String(140))
+    japanese  = db.Column(db.String(140))
     
     def __init__(self, english, japanese, book_id):
         self.english = english
