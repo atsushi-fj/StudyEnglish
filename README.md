@@ -5,11 +5,6 @@
 
 [アプリはこちらから](http://study-english-language.online/)
 
-#### 管理ユーザー
-メールアドレス: admin_user@test.com<br>
-パスワード: 123
-
-
 ## 使用技術
 - **フロントエンド**: Vue.js
 - **バックエンド**: Flask (Python)
