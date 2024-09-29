@@ -49,7 +49,7 @@ export default {
       formData.append('title', this.title);
       formData.append('picture', this.picture);
       try {
-        const response = await axios.put(`http://18.177.110.46/${this.$route.params.user_id}/create_book`, formData, {
+        const response = await axios.put(`http://18.177.110.46:8000/${this.$route.params.user_id}/create_book`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

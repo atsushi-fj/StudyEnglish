@@ -66,7 +66,7 @@ export default {
   methods: {
     async fetchUsers(page = 1) {
       try {
-          const response = await axios.get('http://18.177.110.46/users', {
+          const response = await axios.get('http://18.177.110.46:8000/users', {
               params: {
                 page: page,
                 per_page: this.perPage,

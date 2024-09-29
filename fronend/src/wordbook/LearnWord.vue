@@ -70,7 +70,7 @@ export default {
     methods: {
       async playAudio(text) {
         try {
-          const response = await axios.post(`http://18.177.110.46/speak`, {
+          const response = await axios.post(`http://18.177.110.46:8000/speak`, {
             text: text
           }, { responseType: 'blob' });
           const audioBlob = new Blob([response.data], { type: 'audio/mp3'});  
@@ -85,7 +85,7 @@ export default {
         try {
             this.showMessage = false;
             const wordbookId = this.$route.params.wordbook_id;
-            const response = await axios.get(`http://18.177.110.46/${wordbookId}/words`, {
+            const response = await axios.get(`http://18.177.110.46:8000/${wordbookId}/words`, {
                 params: {
                   page: page,
                   per_page: this.perPage,

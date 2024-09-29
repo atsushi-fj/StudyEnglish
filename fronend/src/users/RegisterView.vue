@@ -49,7 +49,7 @@ export default {
           'passConfirm': String(this.passConfirm),
         };
 
-        const response = await axios.post('http://18.177.110.46/register', postData);
+        const response = await axios.post('http://18.177.110.46:8000/register', postData);
         this.registerStatus = response.data.status;
         if (this.registerStatus === 'SUCCESS') {
           this.$router.push({ name: 'login'} );

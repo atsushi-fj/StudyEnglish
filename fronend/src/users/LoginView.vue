@@ -49,7 +49,7 @@ export default {
           'password': String(this.password)    
         };
 
-        const response = await axios.post('http://18.177.110.46/login', postData);
+        const response = await axios.post('http://18.177.110.46:8000/login', postData);
         this.loginStatus = response.data.status;
         if (this.loginStatus === "SUCCESS") {
           this.loginAuth();

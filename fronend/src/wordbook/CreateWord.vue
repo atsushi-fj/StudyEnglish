@@ -46,7 +46,7 @@ export default {
         'english': this.english,
     }
     try {
-      const response = await axios.put(`http://18.177.110.46/${this.$route.params.wordbook_id}/word`, putData);
+      const response = await axios.put(`http://18.177.110.46:8000/${this.$route.params.wordbook_id}/word`, putData);
       if (response.data.status === 'Create successful') {
         this.message = '新しい英単語を作成しました。';
       } else if (response.data.status === 'English FAIL') {

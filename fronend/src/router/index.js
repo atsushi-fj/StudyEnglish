@@ -148,7 +148,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.name === 'words' || to.name === 'start_learning' || to.name === 'learn_word' || to.name === 'end_learning') {
     try {
-      const respose = await axios.get(`http://18.177.110.46/${to.params.wordbook_id}/get_wordbook_id`);
+      const respose = await axios.get(`http://18.177.110.46:8000/${to.params.wordbook_id}/get_wordbook_id`);
       isPublicBook = respose.data.is_public;
     } catch(error) {
       console.log(error)

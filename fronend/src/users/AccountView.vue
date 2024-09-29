@@ -64,7 +64,7 @@
       async fetchUserData() {
         const userId = this.$route.params.user_id;
         try {
-            const response = await axios.get(`http://18.177.110.46/${userId}/account`);
+            const response = await axios.get(`http://18.177.110.46:8000/${userId}/account`);
             this.email = response.data.email;
             this.username = response.data.username;
         } catch(error) {
@@ -84,7 +84,7 @@
             'password': String(this.password),
           };
   
-          const response = await axios.put(`http://18.177.110.46/${userId}/account`, putData);
+          const response = await axios.put(`http://18.177.110.46:8000/${userId}/account`, putData);
           this.updateStatus = response.data.status;
           if (this.updateStatus === 'SUCCESS') {
             this.$router.push({ name: 'home'} );
@@ -107,7 +107,7 @@
       async deleteUser() {
         try {
             const userId = this.$route.params.user_id;
-            const response = await axios.delete(`http://18.177.110.46/${userId}/account`);
+            const response = await axios.delete(`http://18.177.110.46:8000/${userId}/account`);
             this.deleteStatus = response.data.status;
             this.hideModal();
             if (this.deleteStatus === 'SUCCESS') {

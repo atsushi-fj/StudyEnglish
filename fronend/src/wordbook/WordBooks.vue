@@ -23,7 +23,7 @@
             <div class="card h-100">
               <div class="card-body d-flex flex-column">
                 <div class="mb-3 flex-grow-1 d-flex align-items-center justify-content-center">
-                  <img :src="`http://18.177.110.46/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top">
+                  <img :src="`http://18.177.110.46:8000/images/${wordbook.image}`" :alt="wordbook.image" class="img-fluid card-img-top">
                 </div>
                 <h3>
                   <a href="" class="card-title text-decoration-none">
@@ -129,7 +129,7 @@ export default {
     async deleteBook(id = 1) {
       const userId = this.$route.params.user_id;
       try {
-        const response = await axios.delete(`http://18.177.110.46/${userId}/wordbooks`, {
+        const response = await axios.delete(`http://18.177.110.46:8000/${userId}/wordbooks`, {
           data: {
             book_id: id,
           }
@@ -144,7 +144,7 @@ export default {
     async publicBook(id = 1) {
       const userId = this.$route.params.user_id;
       try {
-        const response = await axios.patch(`http://18.177.110.46/${userId}/wordbooks`, {
+        const response = await axios.patch(`http://18.177.110.46:8000/${userId}/wordbooks`, {
             book_id: id,
         });
         this.publicStatus = response.data.status;
@@ -157,7 +157,7 @@ export default {
     async fetchBooks(page = 1) {
       const userId = this.$route.params.user_id;
       try {
-          const response = await axios.get(`http://18.177.110.46/${userId}/wordbooks`, {
+          const response = await axios.get(`http://18.177.110.46:8000/${userId}/wordbooks`, {
               params: {
                 page: page,
                 per_page: this.perPage,
